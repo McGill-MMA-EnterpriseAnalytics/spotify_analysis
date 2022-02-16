@@ -1,0 +1,4143 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "lygxwex04S6x"
+   },
+   "source": [
+    "# INSY 695 Final Project\n",
+    "##### Group Members: Alice Liu, Corrine Jiang, Yi Kuang, Yichen Wang, Yulin Hong, Jingyu Chen, Kexin Wang, Xintong Li "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "Ya6LBrKY4ShD"
+   },
+   "source": [
+    "## 1. Environment Setup"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "b0sc-k4UTpiv"
+   },
+   "source": [
+    "### 1.1 Load Packages"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "id": "FvUMNsHsTqkQ"
+   },
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "rpeC2RsRTjsg"
+   },
+   "source": [
+    "### 1.2 Load Spotify Dataset"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "id": "Mat7vJl8Elmo"
+   },
+   "outputs": [],
+   "source": [
+    "data1 = pd.read_csv('https://raw.githubusercontent.com/gabminamedez/spotify-data/master/data.csv')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 835
+    },
+    "id": "-l7f-PoMEsLw",
+    "outputId": "514d2015-ef6c-42fa-e9de-614cb63d848e"
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>id</th>\n",
+       "      <th>name</th>\n",
+       "      <th>artists</th>\n",
+       "      <th>duration_ms</th>\n",
+       "      <th>release_date</th>\n",
+       "      <th>year</th>\n",
+       "      <th>acousticness</th>\n",
+       "      <th>danceability</th>\n",
+       "      <th>energy</th>\n",
+       "      <th>instrumentalness</th>\n",
+       "      <th>liveness</th>\n",
+       "      <th>loudness</th>\n",
+       "      <th>speechiness</th>\n",
+       "      <th>tempo</th>\n",
+       "      <th>valence</th>\n",
+       "      <th>mode</th>\n",
+       "      <th>key</th>\n",
+       "      <th>popularity</th>\n",
+       "      <th>explicit</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>6KbQ3uYMLKb5jDxLF7wYDD</td>\n",
+       "      <td>Singende Bataillone 1. Teil</td>\n",
+       "      <td>['Carl Woitschach']</td>\n",
+       "      <td>158648</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9950</td>\n",
+       "      <td>0.708</td>\n",
+       "      <td>0.1950</td>\n",
+       "      <td>0.563000</td>\n",
+       "      <td>0.1510</td>\n",
+       "      <td>-12.428</td>\n",
+       "      <td>0.0506</td>\n",
+       "      <td>118.469</td>\n",
+       "      <td>0.7790</td>\n",
+       "      <td>1</td>\n",
+       "      <td>10</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>6KuQTIu1KoTTkLXKrwlLPV</td>\n",
+       "      <td>Fantasiestücke, Op. 111: Più tosto lento</td>\n",
+       "      <td>['Robert Schumann', 'Vladimir Horowitz']</td>\n",
+       "      <td>282133</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9940</td>\n",
+       "      <td>0.379</td>\n",
+       "      <td>0.0135</td>\n",
+       "      <td>0.901000</td>\n",
+       "      <td>0.0763</td>\n",
+       "      <td>-28.454</td>\n",
+       "      <td>0.0462</td>\n",
+       "      <td>83.972</td>\n",
+       "      <td>0.0767</td>\n",
+       "      <td>1</td>\n",
+       "      <td>8</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>6L63VW0PibdM1HDSBoqnoM</td>\n",
+       "      <td>Chapter 1.18 - Zamek kaniowski</td>\n",
+       "      <td>['Seweryn Goszczyński']</td>\n",
+       "      <td>104300</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.6040</td>\n",
+       "      <td>0.749</td>\n",
+       "      <td>0.2200</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.1190</td>\n",
+       "      <td>-19.924</td>\n",
+       "      <td>0.9290</td>\n",
+       "      <td>107.177</td>\n",
+       "      <td>0.8800</td>\n",
+       "      <td>0</td>\n",
+       "      <td>5</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>6M94FkXd15sOAOQYRnWPN8</td>\n",
+       "      <td>Bebamos Juntos - Instrumental (Remasterizado)</td>\n",
+       "      <td>['Francisco Canaro']</td>\n",
+       "      <td>180760</td>\n",
+       "      <td>9/25/28</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9950</td>\n",
+       "      <td>0.781</td>\n",
+       "      <td>0.1300</td>\n",
+       "      <td>0.887000</td>\n",
+       "      <td>0.1110</td>\n",
+       "      <td>-14.734</td>\n",
+       "      <td>0.0926</td>\n",
+       "      <td>108.003</td>\n",
+       "      <td>0.7200</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>6N6tiFZ9vLTSOIxkj8qKrd</td>\n",
+       "      <td>Polonaise-Fantaisie in A-Flat Major, Op. 61</td>\n",
+       "      <td>['Frédéric Chopin', 'Vladimir Horowitz']</td>\n",
+       "      <td>687733</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9900</td>\n",
+       "      <td>0.210</td>\n",
+       "      <td>0.2040</td>\n",
+       "      <td>0.908000</td>\n",
+       "      <td>0.0980</td>\n",
+       "      <td>-16.829</td>\n",
+       "      <td>0.0424</td>\n",
+       "      <td>62.149</td>\n",
+       "      <td>0.0693</td>\n",
+       "      <td>1</td>\n",
+       "      <td>11</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169904</th>\n",
+       "      <td>4KppkflX7I3vJQk7urOJaS</td>\n",
+       "      <td>Skechers (feat. Tyga) - Remix</td>\n",
+       "      <td>['DripReport', 'Tyga']</td>\n",
+       "      <td>163800</td>\n",
+       "      <td>5/15/20</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.1730</td>\n",
+       "      <td>0.875</td>\n",
+       "      <td>0.4430</td>\n",
+       "      <td>0.000032</td>\n",
+       "      <td>0.0891</td>\n",
+       "      <td>-7.461</td>\n",
+       "      <td>0.1430</td>\n",
+       "      <td>100.012</td>\n",
+       "      <td>0.3060</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>75</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169905</th>\n",
+       "      <td>1ehhGlTvjtHo2e4xJFB0SZ</td>\n",
+       "      <td>Sweeter (feat. Terrace Martin)</td>\n",
+       "      <td>['Leon Bridges', 'Terrace Martin']</td>\n",
+       "      <td>167468</td>\n",
+       "      <td>6/8/20</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.0167</td>\n",
+       "      <td>0.719</td>\n",
+       "      <td>0.3850</td>\n",
+       "      <td>0.031300</td>\n",
+       "      <td>0.1110</td>\n",
+       "      <td>-10.907</td>\n",
+       "      <td>0.0403</td>\n",
+       "      <td>128.000</td>\n",
+       "      <td>0.2700</td>\n",
+       "      <td>1</td>\n",
+       "      <td>8</td>\n",
+       "      <td>64</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169906</th>\n",
+       "      <td>52eycxprLhK3lPcRLbQiVk</td>\n",
+       "      <td>How Would I Know</td>\n",
+       "      <td>['Kygo', 'Oh Wonder']</td>\n",
+       "      <td>180700</td>\n",
+       "      <td>5/29/20</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.5380</td>\n",
+       "      <td>0.514</td>\n",
+       "      <td>0.5390</td>\n",
+       "      <td>0.002330</td>\n",
+       "      <td>0.1080</td>\n",
+       "      <td>-9.332</td>\n",
+       "      <td>0.1050</td>\n",
+       "      <td>123.700</td>\n",
+       "      <td>0.1530</td>\n",
+       "      <td>1</td>\n",
+       "      <td>7</td>\n",
+       "      <td>70</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169907</th>\n",
+       "      <td>3wYOGJYD31sLRmBgCvWxa4</td>\n",
+       "      <td>I Found You</td>\n",
+       "      <td>['Cash Cash', 'Andy Grammer']</td>\n",
+       "      <td>167308</td>\n",
+       "      <td>2/28/20</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.0714</td>\n",
+       "      <td>0.646</td>\n",
+       "      <td>0.7610</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.2220</td>\n",
+       "      <td>-2.557</td>\n",
+       "      <td>0.0385</td>\n",
+       "      <td>129.916</td>\n",
+       "      <td>0.4720</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>70</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169908</th>\n",
+       "      <td>60RFlt48hm0l4Fu0JoccOl</td>\n",
+       "      <td>More Hearts Than Mine</td>\n",
+       "      <td>['Ingrid Andress']</td>\n",
+       "      <td>214787</td>\n",
+       "      <td>3/27/20</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.1090</td>\n",
+       "      <td>0.512</td>\n",
+       "      <td>0.4280</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.1050</td>\n",
+       "      <td>-7.387</td>\n",
+       "      <td>0.0271</td>\n",
+       "      <td>80.588</td>\n",
+       "      <td>0.3660</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>65</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>169909 rows × 19 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                            id                                           name  \\\n",
+       "0       6KbQ3uYMLKb5jDxLF7wYDD                    Singende Bataillone 1. Teil   \n",
+       "1       6KuQTIu1KoTTkLXKrwlLPV       Fantasiestücke, Op. 111: Più tosto lento   \n",
+       "2       6L63VW0PibdM1HDSBoqnoM                 Chapter 1.18 - Zamek kaniowski   \n",
+       "3       6M94FkXd15sOAOQYRnWPN8  Bebamos Juntos - Instrumental (Remasterizado)   \n",
+       "4       6N6tiFZ9vLTSOIxkj8qKrd    Polonaise-Fantaisie in A-Flat Major, Op. 61   \n",
+       "...                        ...                                            ...   \n",
+       "169904  4KppkflX7I3vJQk7urOJaS                  Skechers (feat. Tyga) - Remix   \n",
+       "169905  1ehhGlTvjtHo2e4xJFB0SZ                 Sweeter (feat. Terrace Martin)   \n",
+       "169906  52eycxprLhK3lPcRLbQiVk                               How Would I Know   \n",
+       "169907  3wYOGJYD31sLRmBgCvWxa4                                    I Found You   \n",
+       "169908  60RFlt48hm0l4Fu0JoccOl                          More Hearts Than Mine   \n",
+       "\n",
+       "                                         artists  duration_ms release_date  \\\n",
+       "0                            ['Carl Woitschach']       158648         1928   \n",
+       "1       ['Robert Schumann', 'Vladimir Horowitz']       282133         1928   \n",
+       "2                        ['Seweryn Goszczyński']       104300         1928   \n",
+       "3                           ['Francisco Canaro']       180760      9/25/28   \n",
+       "4       ['Frédéric Chopin', 'Vladimir Horowitz']       687733         1928   \n",
+       "...                                          ...          ...          ...   \n",
+       "169904                    ['DripReport', 'Tyga']       163800      5/15/20   \n",
+       "169905        ['Leon Bridges', 'Terrace Martin']       167468       6/8/20   \n",
+       "169906                     ['Kygo', 'Oh Wonder']       180700      5/29/20   \n",
+       "169907             ['Cash Cash', 'Andy Grammer']       167308      2/28/20   \n",
+       "169908                        ['Ingrid Andress']       214787      3/27/20   \n",
+       "\n",
+       "        year  acousticness  danceability  energy  instrumentalness  liveness  \\\n",
+       "0       1928        0.9950         0.708  0.1950          0.563000    0.1510   \n",
+       "1       1928        0.9940         0.379  0.0135          0.901000    0.0763   \n",
+       "2       1928        0.6040         0.749  0.2200          0.000000    0.1190   \n",
+       "3       1928        0.9950         0.781  0.1300          0.887000    0.1110   \n",
+       "4       1928        0.9900         0.210  0.2040          0.908000    0.0980   \n",
+       "...      ...           ...           ...     ...               ...       ...   \n",
+       "169904  2020        0.1730         0.875  0.4430          0.000032    0.0891   \n",
+       "169905  2020        0.0167         0.719  0.3850          0.031300    0.1110   \n",
+       "169906  2020        0.5380         0.514  0.5390          0.002330    0.1080   \n",
+       "169907  2020        0.0714         0.646  0.7610          0.000000    0.2220   \n",
+       "169908  2020        0.1090         0.512  0.4280          0.000000    0.1050   \n",
+       "\n",
+       "        loudness  speechiness    tempo  valence  mode  key  popularity  \\\n",
+       "0        -12.428       0.0506  118.469   0.7790     1   10           0   \n",
+       "1        -28.454       0.0462   83.972   0.0767     1    8           0   \n",
+       "2        -19.924       0.9290  107.177   0.8800     0    5           0   \n",
+       "3        -14.734       0.0926  108.003   0.7200     0    1           0   \n",
+       "4        -16.829       0.0424   62.149   0.0693     1   11           1   \n",
+       "...          ...          ...      ...      ...   ...  ...         ...   \n",
+       "169904    -7.461       0.1430  100.012   0.3060     1    1          75   \n",
+       "169905   -10.907       0.0403  128.000   0.2700     1    8          64   \n",
+       "169906    -9.332       0.1050  123.700   0.1530     1    7          70   \n",
+       "169907    -2.557       0.0385  129.916   0.4720     1    1          70   \n",
+       "169908    -7.387       0.0271   80.588   0.3660     1    0          65   \n",
+       "\n",
+       "        explicit  \n",
+       "0              0  \n",
+       "1              0  \n",
+       "2              0  \n",
+       "3              0  \n",
+       "4              0  \n",
+       "...          ...  \n",
+       "169904         1  \n",
+       "169905         0  \n",
+       "169906         0  \n",
+       "169907         0  \n",
+       "169908         0  \n",
+       "\n",
+       "[169909 rows x 19 columns]"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data1"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "t2M5c-L14vrx"
+   },
+   "source": [
+    "## 2. Data Pre-processing"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "Bpc2OYR8FPKJ"
+   },
+   "source": [
+    "###2.1 Drop unnecessary columns"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "qMnMqNF9T5NW"
+   },
+   "source": [
+    "Column 'id' contains all unique values, which is not useful for machine larning. <br>\n",
+    "Column 'release_date' contains information which is repeated in column 'year'."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "id": "JO5__bcLAleT"
+   },
+   "outputs": [],
+   "source": [
+    "data2 = data1.drop(columns=['id','release_date'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 835
+    },
+    "id": "D7BboNbXFbA5",
+    "outputId": "368ab3ef-ea9d-481c-9fd8-935f4ed7ea73"
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>name</th>\n",
+       "      <th>artists</th>\n",
+       "      <th>duration_ms</th>\n",
+       "      <th>year</th>\n",
+       "      <th>acousticness</th>\n",
+       "      <th>danceability</th>\n",
+       "      <th>energy</th>\n",
+       "      <th>instrumentalness</th>\n",
+       "      <th>liveness</th>\n",
+       "      <th>loudness</th>\n",
+       "      <th>speechiness</th>\n",
+       "      <th>tempo</th>\n",
+       "      <th>valence</th>\n",
+       "      <th>mode</th>\n",
+       "      <th>key</th>\n",
+       "      <th>popularity</th>\n",
+       "      <th>explicit</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Singende Bataillone 1. Teil</td>\n",
+       "      <td>['Carl Woitschach']</td>\n",
+       "      <td>158648</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9950</td>\n",
+       "      <td>0.708</td>\n",
+       "      <td>0.1950</td>\n",
+       "      <td>0.563000</td>\n",
+       "      <td>0.1510</td>\n",
+       "      <td>-12.428</td>\n",
+       "      <td>0.0506</td>\n",
+       "      <td>118.469</td>\n",
+       "      <td>0.7790</td>\n",
+       "      <td>1</td>\n",
+       "      <td>10</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>Fantasiestücke, Op. 111: Più tosto lento</td>\n",
+       "      <td>['Robert Schumann', 'Vladimir Horowitz']</td>\n",
+       "      <td>282133</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9940</td>\n",
+       "      <td>0.379</td>\n",
+       "      <td>0.0135</td>\n",
+       "      <td>0.901000</td>\n",
+       "      <td>0.0763</td>\n",
+       "      <td>-28.454</td>\n",
+       "      <td>0.0462</td>\n",
+       "      <td>83.972</td>\n",
+       "      <td>0.0767</td>\n",
+       "      <td>1</td>\n",
+       "      <td>8</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Chapter 1.18 - Zamek kaniowski</td>\n",
+       "      <td>['Seweryn Goszczyński']</td>\n",
+       "      <td>104300</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.6040</td>\n",
+       "      <td>0.749</td>\n",
+       "      <td>0.2200</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.1190</td>\n",
+       "      <td>-19.924</td>\n",
+       "      <td>0.9290</td>\n",
+       "      <td>107.177</td>\n",
+       "      <td>0.8800</td>\n",
+       "      <td>0</td>\n",
+       "      <td>5</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Bebamos Juntos - Instrumental (Remasterizado)</td>\n",
+       "      <td>['Francisco Canaro']</td>\n",
+       "      <td>180760</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9950</td>\n",
+       "      <td>0.781</td>\n",
+       "      <td>0.1300</td>\n",
+       "      <td>0.887000</td>\n",
+       "      <td>0.1110</td>\n",
+       "      <td>-14.734</td>\n",
+       "      <td>0.0926</td>\n",
+       "      <td>108.003</td>\n",
+       "      <td>0.7200</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Polonaise-Fantaisie in A-Flat Major, Op. 61</td>\n",
+       "      <td>['Frédéric Chopin', 'Vladimir Horowitz']</td>\n",
+       "      <td>687733</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9900</td>\n",
+       "      <td>0.210</td>\n",
+       "      <td>0.2040</td>\n",
+       "      <td>0.908000</td>\n",
+       "      <td>0.0980</td>\n",
+       "      <td>-16.829</td>\n",
+       "      <td>0.0424</td>\n",
+       "      <td>62.149</td>\n",
+       "      <td>0.0693</td>\n",
+       "      <td>1</td>\n",
+       "      <td>11</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169904</th>\n",
+       "      <td>Skechers (feat. Tyga) - Remix</td>\n",
+       "      <td>['DripReport', 'Tyga']</td>\n",
+       "      <td>163800</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.1730</td>\n",
+       "      <td>0.875</td>\n",
+       "      <td>0.4430</td>\n",
+       "      <td>0.000032</td>\n",
+       "      <td>0.0891</td>\n",
+       "      <td>-7.461</td>\n",
+       "      <td>0.1430</td>\n",
+       "      <td>100.012</td>\n",
+       "      <td>0.3060</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>75</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169905</th>\n",
+       "      <td>Sweeter (feat. Terrace Martin)</td>\n",
+       "      <td>['Leon Bridges', 'Terrace Martin']</td>\n",
+       "      <td>167468</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.0167</td>\n",
+       "      <td>0.719</td>\n",
+       "      <td>0.3850</td>\n",
+       "      <td>0.031300</td>\n",
+       "      <td>0.1110</td>\n",
+       "      <td>-10.907</td>\n",
+       "      <td>0.0403</td>\n",
+       "      <td>128.000</td>\n",
+       "      <td>0.2700</td>\n",
+       "      <td>1</td>\n",
+       "      <td>8</td>\n",
+       "      <td>64</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169906</th>\n",
+       "      <td>How Would I Know</td>\n",
+       "      <td>['Kygo', 'Oh Wonder']</td>\n",
+       "      <td>180700</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.5380</td>\n",
+       "      <td>0.514</td>\n",
+       "      <td>0.5390</td>\n",
+       "      <td>0.002330</td>\n",
+       "      <td>0.1080</td>\n",
+       "      <td>-9.332</td>\n",
+       "      <td>0.1050</td>\n",
+       "      <td>123.700</td>\n",
+       "      <td>0.1530</td>\n",
+       "      <td>1</td>\n",
+       "      <td>7</td>\n",
+       "      <td>70</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169907</th>\n",
+       "      <td>I Found You</td>\n",
+       "      <td>['Cash Cash', 'Andy Grammer']</td>\n",
+       "      <td>167308</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.0714</td>\n",
+       "      <td>0.646</td>\n",
+       "      <td>0.7610</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.2220</td>\n",
+       "      <td>-2.557</td>\n",
+       "      <td>0.0385</td>\n",
+       "      <td>129.916</td>\n",
+       "      <td>0.4720</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>70</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169908</th>\n",
+       "      <td>More Hearts Than Mine</td>\n",
+       "      <td>['Ingrid Andress']</td>\n",
+       "      <td>214787</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.1090</td>\n",
+       "      <td>0.512</td>\n",
+       "      <td>0.4280</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.1050</td>\n",
+       "      <td>-7.387</td>\n",
+       "      <td>0.0271</td>\n",
+       "      <td>80.588</td>\n",
+       "      <td>0.3660</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>65</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>169909 rows × 17 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                                 name  \\\n",
+       "0                         Singende Bataillone 1. Teil   \n",
+       "1            Fantasiestücke, Op. 111: Più tosto lento   \n",
+       "2                      Chapter 1.18 - Zamek kaniowski   \n",
+       "3       Bebamos Juntos - Instrumental (Remasterizado)   \n",
+       "4         Polonaise-Fantaisie in A-Flat Major, Op. 61   \n",
+       "...                                               ...   \n",
+       "169904                  Skechers (feat. Tyga) - Remix   \n",
+       "169905                 Sweeter (feat. Terrace Martin)   \n",
+       "169906                               How Would I Know   \n",
+       "169907                                    I Found You   \n",
+       "169908                          More Hearts Than Mine   \n",
+       "\n",
+       "                                         artists  duration_ms  year  \\\n",
+       "0                            ['Carl Woitschach']       158648  1928   \n",
+       "1       ['Robert Schumann', 'Vladimir Horowitz']       282133  1928   \n",
+       "2                        ['Seweryn Goszczyński']       104300  1928   \n",
+       "3                           ['Francisco Canaro']       180760  1928   \n",
+       "4       ['Frédéric Chopin', 'Vladimir Horowitz']       687733  1928   \n",
+       "...                                          ...          ...   ...   \n",
+       "169904                    ['DripReport', 'Tyga']       163800  2020   \n",
+       "169905        ['Leon Bridges', 'Terrace Martin']       167468  2020   \n",
+       "169906                     ['Kygo', 'Oh Wonder']       180700  2020   \n",
+       "169907             ['Cash Cash', 'Andy Grammer']       167308  2020   \n",
+       "169908                        ['Ingrid Andress']       214787  2020   \n",
+       "\n",
+       "        acousticness  danceability  energy  instrumentalness  liveness  \\\n",
+       "0             0.9950         0.708  0.1950          0.563000    0.1510   \n",
+       "1             0.9940         0.379  0.0135          0.901000    0.0763   \n",
+       "2             0.6040         0.749  0.2200          0.000000    0.1190   \n",
+       "3             0.9950         0.781  0.1300          0.887000    0.1110   \n",
+       "4             0.9900         0.210  0.2040          0.908000    0.0980   \n",
+       "...              ...           ...     ...               ...       ...   \n",
+       "169904        0.1730         0.875  0.4430          0.000032    0.0891   \n",
+       "169905        0.0167         0.719  0.3850          0.031300    0.1110   \n",
+       "169906        0.5380         0.514  0.5390          0.002330    0.1080   \n",
+       "169907        0.0714         0.646  0.7610          0.000000    0.2220   \n",
+       "169908        0.1090         0.512  0.4280          0.000000    0.1050   \n",
+       "\n",
+       "        loudness  speechiness    tempo  valence  mode  key  popularity  \\\n",
+       "0        -12.428       0.0506  118.469   0.7790     1   10           0   \n",
+       "1        -28.454       0.0462   83.972   0.0767     1    8           0   \n",
+       "2        -19.924       0.9290  107.177   0.8800     0    5           0   \n",
+       "3        -14.734       0.0926  108.003   0.7200     0    1           0   \n",
+       "4        -16.829       0.0424   62.149   0.0693     1   11           1   \n",
+       "...          ...          ...      ...      ...   ...  ...         ...   \n",
+       "169904    -7.461       0.1430  100.012   0.3060     1    1          75   \n",
+       "169905   -10.907       0.0403  128.000   0.2700     1    8          64   \n",
+       "169906    -9.332       0.1050  123.700   0.1530     1    7          70   \n",
+       "169907    -2.557       0.0385  129.916   0.4720     1    1          70   \n",
+       "169908    -7.387       0.0271   80.588   0.3660     1    0          65   \n",
+       "\n",
+       "        explicit  \n",
+       "0              0  \n",
+       "1              0  \n",
+       "2              0  \n",
+       "3              0  \n",
+       "4              0  \n",
+       "...          ...  \n",
+       "169904         1  \n",
+       "169905         0  \n",
+       "169906         0  \n",
+       "169907         0  \n",
+       "169908         0  \n",
+       "\n",
+       "[169909 rows x 17 columns]"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data2"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "GcRN8dJDTSwH"
+   },
+   "source": [
+    "###2.2 Data Structure and Value Exploration"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "ex3OekV5GVIC",
+    "outputId": "2fc14e26-ae8c-4deb-d09e-dcbae6b93329"
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 169909 entries, 0 to 169908\n",
+      "Data columns (total 17 columns):\n",
+      " #   Column            Non-Null Count   Dtype  \n",
+      "---  ------            --------------   -----  \n",
+      " 0   name              169909 non-null  object \n",
+      " 1   artists           169909 non-null  object \n",
+      " 2   duration_ms       169909 non-null  int64  \n",
+      " 3   year              169909 non-null  int64  \n",
+      " 4   acousticness      169909 non-null  float64\n",
+      " 5   danceability      169909 non-null  float64\n",
+      " 6   energy            169909 non-null  float64\n",
+      " 7   instrumentalness  169909 non-null  float64\n",
+      " 8   liveness          169909 non-null  float64\n",
+      " 9   loudness          169909 non-null  float64\n",
+      " 10  speechiness       169909 non-null  float64\n",
+      " 11  tempo             169909 non-null  float64\n",
+      " 12  valence           169909 non-null  float64\n",
+      " 13  mode              169909 non-null  int64  \n",
+      " 14  key               169909 non-null  int64  \n",
+      " 15  popularity        169909 non-null  int64  \n",
+      " 16  explicit          169909 non-null  int64  \n",
+      "dtypes: float64(9), int64(6), object(2)\n",
+      "memory usage: 22.0+ MB\n"
+     ]
+    }
+   ],
+   "source": [
+    "data2.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 364
+    },
+    "id": "xUNP24kcIUXp",
+    "outputId": "36d50823-7f3a-4fd6-c03a-efaa9bb1e802"
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>duration_ms</th>\n",
+       "      <th>year</th>\n",
+       "      <th>acousticness</th>\n",
+       "      <th>danceability</th>\n",
+       "      <th>energy</th>\n",
+       "      <th>instrumentalness</th>\n",
+       "      <th>liveness</th>\n",
+       "      <th>loudness</th>\n",
+       "      <th>speechiness</th>\n",
+       "      <th>tempo</th>\n",
+       "      <th>valence</th>\n",
+       "      <th>mode</th>\n",
+       "      <th>key</th>\n",
+       "      <th>popularity</th>\n",
+       "      <th>explicit</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>count</th>\n",
+       "      <td>1.699090e+05</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "      <td>169909.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>mean</th>\n",
+       "      <td>2.314062e+05</td>\n",
+       "      <td>1977.223231</td>\n",
+       "      <td>0.493214</td>\n",
+       "      <td>0.538150</td>\n",
+       "      <td>0.488593</td>\n",
+       "      <td>0.161937</td>\n",
+       "      <td>0.206690</td>\n",
+       "      <td>-11.370289</td>\n",
+       "      <td>0.094058</td>\n",
+       "      <td>116.948017</td>\n",
+       "      <td>0.532095</td>\n",
+       "      <td>0.708556</td>\n",
+       "      <td>5.200519</td>\n",
+       "      <td>31.556610</td>\n",
+       "      <td>0.084863</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>std</th>\n",
+       "      <td>1.213219e+05</td>\n",
+       "      <td>25.593168</td>\n",
+       "      <td>0.376627</td>\n",
+       "      <td>0.175346</td>\n",
+       "      <td>0.267390</td>\n",
+       "      <td>0.309329</td>\n",
+       "      <td>0.176796</td>\n",
+       "      <td>5.666765</td>\n",
+       "      <td>0.149937</td>\n",
+       "      <td>30.726937</td>\n",
+       "      <td>0.262408</td>\n",
+       "      <td>0.454429</td>\n",
+       "      <td>3.515257</td>\n",
+       "      <td>21.582614</td>\n",
+       "      <td>0.278679</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>min</th>\n",
+       "      <td>5.108000e+03</td>\n",
+       "      <td>1921.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>-60.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>25%</th>\n",
+       "      <td>1.710400e+05</td>\n",
+       "      <td>1957.000000</td>\n",
+       "      <td>0.094500</td>\n",
+       "      <td>0.417000</td>\n",
+       "      <td>0.263000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.098400</td>\n",
+       "      <td>-14.470000</td>\n",
+       "      <td>0.034900</td>\n",
+       "      <td>93.516000</td>\n",
+       "      <td>0.322000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>2.000000</td>\n",
+       "      <td>12.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>50%</th>\n",
+       "      <td>2.086000e+05</td>\n",
+       "      <td>1978.000000</td>\n",
+       "      <td>0.492000</td>\n",
+       "      <td>0.548000</td>\n",
+       "      <td>0.481000</td>\n",
+       "      <td>0.000204</td>\n",
+       "      <td>0.135000</td>\n",
+       "      <td>-10.474000</td>\n",
+       "      <td>0.045000</td>\n",
+       "      <td>114.778000</td>\n",
+       "      <td>0.544000</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>5.000000</td>\n",
+       "      <td>33.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>75%</th>\n",
+       "      <td>2.629600e+05</td>\n",
+       "      <td>1999.000000</td>\n",
+       "      <td>0.888000</td>\n",
+       "      <td>0.667000</td>\n",
+       "      <td>0.710000</td>\n",
+       "      <td>0.086800</td>\n",
+       "      <td>0.263000</td>\n",
+       "      <td>-7.118000</td>\n",
+       "      <td>0.075400</td>\n",
+       "      <td>135.712000</td>\n",
+       "      <td>0.749000</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>8.000000</td>\n",
+       "      <td>48.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>max</th>\n",
+       "      <td>5.403500e+06</td>\n",
+       "      <td>2020.000000</td>\n",
+       "      <td>0.996000</td>\n",
+       "      <td>0.988000</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>3.855000</td>\n",
+       "      <td>0.969000</td>\n",
+       "      <td>244.091000</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>11.000000</td>\n",
+       "      <td>100.000000</td>\n",
+       "      <td>1.000000</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "        duration_ms           year   acousticness   danceability  \\\n",
+       "count  1.699090e+05  169909.000000  169909.000000  169909.000000   \n",
+       "mean   2.314062e+05    1977.223231       0.493214       0.538150   \n",
+       "std    1.213219e+05      25.593168       0.376627       0.175346   \n",
+       "min    5.108000e+03    1921.000000       0.000000       0.000000   \n",
+       "25%    1.710400e+05    1957.000000       0.094500       0.417000   \n",
+       "50%    2.086000e+05    1978.000000       0.492000       0.548000   \n",
+       "75%    2.629600e+05    1999.000000       0.888000       0.667000   \n",
+       "max    5.403500e+06    2020.000000       0.996000       0.988000   \n",
+       "\n",
+       "              energy  instrumentalness       liveness       loudness  \\\n",
+       "count  169909.000000     169909.000000  169909.000000  169909.000000   \n",
+       "mean        0.488593          0.161937       0.206690     -11.370289   \n",
+       "std         0.267390          0.309329       0.176796       5.666765   \n",
+       "min         0.000000          0.000000       0.000000     -60.000000   \n",
+       "25%         0.263000          0.000000       0.098400     -14.470000   \n",
+       "50%         0.481000          0.000204       0.135000     -10.474000   \n",
+       "75%         0.710000          0.086800       0.263000      -7.118000   \n",
+       "max         1.000000          1.000000       1.000000       3.855000   \n",
+       "\n",
+       "         speechiness          tempo        valence           mode  \\\n",
+       "count  169909.000000  169909.000000  169909.000000  169909.000000   \n",
+       "mean        0.094058     116.948017       0.532095       0.708556   \n",
+       "std         0.149937      30.726937       0.262408       0.454429   \n",
+       "min         0.000000       0.000000       0.000000       0.000000   \n",
+       "25%         0.034900      93.516000       0.322000       0.000000   \n",
+       "50%         0.045000     114.778000       0.544000       1.000000   \n",
+       "75%         0.075400     135.712000       0.749000       1.000000   \n",
+       "max         0.969000     244.091000       1.000000       1.000000   \n",
+       "\n",
+       "                 key     popularity       explicit  \n",
+       "count  169909.000000  169909.000000  169909.000000  \n",
+       "mean        5.200519      31.556610       0.084863  \n",
+       "std         3.515257      21.582614       0.278679  \n",
+       "min         0.000000       0.000000       0.000000  \n",
+       "25%         2.000000      12.000000       0.000000  \n",
+       "50%         5.000000      33.000000       0.000000  \n",
+       "75%         8.000000      48.000000       0.000000  \n",
+       "max        11.000000     100.000000       1.000000  "
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data2.describe()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "yMSY3I8zUJ1H"
+   },
+   "source": [
+    "We see that this is a fairly clean dataset mainly consisted of numeric values, which is ideal for data learning (regression, clustering, etc.)."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "DB0D7UpDTe30"
+   },
+   "source": [
+    "###2.3 Create New Columns"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "55m0RE6YUefn"
+   },
+   "source": [
+    "We want to create a column that contains data on number of artists."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "OSnKHU1bIWQi",
+    "outputId": "68a7a110-cb33-43e2-a135-3391eb028126"
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "<ipython-input-8-8eea2ed94fce>:6: SettingWithCopyWarning: \n",
+      "A value is trying to be set on a copy of a slice from a DataFrame\n",
+      "\n",
+      "See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy\n",
+      "  data2['NumArtists'][i] = int(len(string))\n"
+     ]
+    }
+   ],
+   "source": [
+    "data2['NumArtists'] = pd.Series(dtype='int')\n",
+    "for i in range(data2.shape[0]):\n",
+    "  string = data2['artists'][i]\n",
+    "  string = string[1:len(string)-1]\n",
+    "  string = string.split(',')\n",
+    "  data2['NumArtists'][i] = int(len(string))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 835
+    },
+    "id": "JdKR-lefK9_2",
+    "outputId": "8ea573f3-b371-42eb-c437-a87d1b9a7448"
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>name</th>\n",
+       "      <th>artists</th>\n",
+       "      <th>duration_ms</th>\n",
+       "      <th>year</th>\n",
+       "      <th>acousticness</th>\n",
+       "      <th>danceability</th>\n",
+       "      <th>energy</th>\n",
+       "      <th>instrumentalness</th>\n",
+       "      <th>liveness</th>\n",
+       "      <th>loudness</th>\n",
+       "      <th>speechiness</th>\n",
+       "      <th>tempo</th>\n",
+       "      <th>valence</th>\n",
+       "      <th>mode</th>\n",
+       "      <th>key</th>\n",
+       "      <th>popularity</th>\n",
+       "      <th>explicit</th>\n",
+       "      <th>NumArtists</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Singende Bataillone 1. Teil</td>\n",
+       "      <td>['Carl Woitschach']</td>\n",
+       "      <td>158648</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9950</td>\n",
+       "      <td>0.708</td>\n",
+       "      <td>0.1950</td>\n",
+       "      <td>0.563000</td>\n",
+       "      <td>0.1510</td>\n",
+       "      <td>-12.428</td>\n",
+       "      <td>0.0506</td>\n",
+       "      <td>118.469</td>\n",
+       "      <td>0.7790</td>\n",
+       "      <td>1</td>\n",
+       "      <td>10</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>Fantasiestücke, Op. 111: Più tosto lento</td>\n",
+       "      <td>['Robert Schumann', 'Vladimir Horowitz']</td>\n",
+       "      <td>282133</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9940</td>\n",
+       "      <td>0.379</td>\n",
+       "      <td>0.0135</td>\n",
+       "      <td>0.901000</td>\n",
+       "      <td>0.0763</td>\n",
+       "      <td>-28.454</td>\n",
+       "      <td>0.0462</td>\n",
+       "      <td>83.972</td>\n",
+       "      <td>0.0767</td>\n",
+       "      <td>1</td>\n",
+       "      <td>8</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Chapter 1.18 - Zamek kaniowski</td>\n",
+       "      <td>['Seweryn Goszczyński']</td>\n",
+       "      <td>104300</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.6040</td>\n",
+       "      <td>0.749</td>\n",
+       "      <td>0.2200</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.1190</td>\n",
+       "      <td>-19.924</td>\n",
+       "      <td>0.9290</td>\n",
+       "      <td>107.177</td>\n",
+       "      <td>0.8800</td>\n",
+       "      <td>0</td>\n",
+       "      <td>5</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Bebamos Juntos - Instrumental (Remasterizado)</td>\n",
+       "      <td>['Francisco Canaro']</td>\n",
+       "      <td>180760</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9950</td>\n",
+       "      <td>0.781</td>\n",
+       "      <td>0.1300</td>\n",
+       "      <td>0.887000</td>\n",
+       "      <td>0.1110</td>\n",
+       "      <td>-14.734</td>\n",
+       "      <td>0.0926</td>\n",
+       "      <td>108.003</td>\n",
+       "      <td>0.7200</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Polonaise-Fantaisie in A-Flat Major, Op. 61</td>\n",
+       "      <td>['Frédéric Chopin', 'Vladimir Horowitz']</td>\n",
+       "      <td>687733</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9900</td>\n",
+       "      <td>0.210</td>\n",
+       "      <td>0.2040</td>\n",
+       "      <td>0.908000</td>\n",
+       "      <td>0.0980</td>\n",
+       "      <td>-16.829</td>\n",
+       "      <td>0.0424</td>\n",
+       "      <td>62.149</td>\n",
+       "      <td>0.0693</td>\n",
+       "      <td>1</td>\n",
+       "      <td>11</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169904</th>\n",
+       "      <td>Skechers (feat. Tyga) - Remix</td>\n",
+       "      <td>['DripReport', 'Tyga']</td>\n",
+       "      <td>163800</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.1730</td>\n",
+       "      <td>0.875</td>\n",
+       "      <td>0.4430</td>\n",
+       "      <td>0.000032</td>\n",
+       "      <td>0.0891</td>\n",
+       "      <td>-7.461</td>\n",
+       "      <td>0.1430</td>\n",
+       "      <td>100.012</td>\n",
+       "      <td>0.3060</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>75</td>\n",
+       "      <td>1</td>\n",
+       "      <td>2.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169905</th>\n",
+       "      <td>Sweeter (feat. Terrace Martin)</td>\n",
+       "      <td>['Leon Bridges', 'Terrace Martin']</td>\n",
+       "      <td>167468</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.0167</td>\n",
+       "      <td>0.719</td>\n",
+       "      <td>0.3850</td>\n",
+       "      <td>0.031300</td>\n",
+       "      <td>0.1110</td>\n",
+       "      <td>-10.907</td>\n",
+       "      <td>0.0403</td>\n",
+       "      <td>128.000</td>\n",
+       "      <td>0.2700</td>\n",
+       "      <td>1</td>\n",
+       "      <td>8</td>\n",
+       "      <td>64</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169906</th>\n",
+       "      <td>How Would I Know</td>\n",
+       "      <td>['Kygo', 'Oh Wonder']</td>\n",
+       "      <td>180700</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.5380</td>\n",
+       "      <td>0.514</td>\n",
+       "      <td>0.5390</td>\n",
+       "      <td>0.002330</td>\n",
+       "      <td>0.1080</td>\n",
+       "      <td>-9.332</td>\n",
+       "      <td>0.1050</td>\n",
+       "      <td>123.700</td>\n",
+       "      <td>0.1530</td>\n",
+       "      <td>1</td>\n",
+       "      <td>7</td>\n",
+       "      <td>70</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169907</th>\n",
+       "      <td>I Found You</td>\n",
+       "      <td>['Cash Cash', 'Andy Grammer']</td>\n",
+       "      <td>167308</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.0714</td>\n",
+       "      <td>0.646</td>\n",
+       "      <td>0.7610</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.2220</td>\n",
+       "      <td>-2.557</td>\n",
+       "      <td>0.0385</td>\n",
+       "      <td>129.916</td>\n",
+       "      <td>0.4720</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>70</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169908</th>\n",
+       "      <td>More Hearts Than Mine</td>\n",
+       "      <td>['Ingrid Andress']</td>\n",
+       "      <td>214787</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.1090</td>\n",
+       "      <td>0.512</td>\n",
+       "      <td>0.4280</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.1050</td>\n",
+       "      <td>-7.387</td>\n",
+       "      <td>0.0271</td>\n",
+       "      <td>80.588</td>\n",
+       "      <td>0.3660</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>65</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>169909 rows × 18 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                                 name  \\\n",
+       "0                         Singende Bataillone 1. Teil   \n",
+       "1            Fantasiestücke, Op. 111: Più tosto lento   \n",
+       "2                      Chapter 1.18 - Zamek kaniowski   \n",
+       "3       Bebamos Juntos - Instrumental (Remasterizado)   \n",
+       "4         Polonaise-Fantaisie in A-Flat Major, Op. 61   \n",
+       "...                                               ...   \n",
+       "169904                  Skechers (feat. Tyga) - Remix   \n",
+       "169905                 Sweeter (feat. Terrace Martin)   \n",
+       "169906                               How Would I Know   \n",
+       "169907                                    I Found You   \n",
+       "169908                          More Hearts Than Mine   \n",
+       "\n",
+       "                                         artists  duration_ms  year  \\\n",
+       "0                            ['Carl Woitschach']       158648  1928   \n",
+       "1       ['Robert Schumann', 'Vladimir Horowitz']       282133  1928   \n",
+       "2                        ['Seweryn Goszczyński']       104300  1928   \n",
+       "3                           ['Francisco Canaro']       180760  1928   \n",
+       "4       ['Frédéric Chopin', 'Vladimir Horowitz']       687733  1928   \n",
+       "...                                          ...          ...   ...   \n",
+       "169904                    ['DripReport', 'Tyga']       163800  2020   \n",
+       "169905        ['Leon Bridges', 'Terrace Martin']       167468  2020   \n",
+       "169906                     ['Kygo', 'Oh Wonder']       180700  2020   \n",
+       "169907             ['Cash Cash', 'Andy Grammer']       167308  2020   \n",
+       "169908                        ['Ingrid Andress']       214787  2020   \n",
+       "\n",
+       "        acousticness  danceability  energy  instrumentalness  liveness  \\\n",
+       "0             0.9950         0.708  0.1950          0.563000    0.1510   \n",
+       "1             0.9940         0.379  0.0135          0.901000    0.0763   \n",
+       "2             0.6040         0.749  0.2200          0.000000    0.1190   \n",
+       "3             0.9950         0.781  0.1300          0.887000    0.1110   \n",
+       "4             0.9900         0.210  0.2040          0.908000    0.0980   \n",
+       "...              ...           ...     ...               ...       ...   \n",
+       "169904        0.1730         0.875  0.4430          0.000032    0.0891   \n",
+       "169905        0.0167         0.719  0.3850          0.031300    0.1110   \n",
+       "169906        0.5380         0.514  0.5390          0.002330    0.1080   \n",
+       "169907        0.0714         0.646  0.7610          0.000000    0.2220   \n",
+       "169908        0.1090         0.512  0.4280          0.000000    0.1050   \n",
+       "\n",
+       "        loudness  speechiness    tempo  valence  mode  key  popularity  \\\n",
+       "0        -12.428       0.0506  118.469   0.7790     1   10           0   \n",
+       "1        -28.454       0.0462   83.972   0.0767     1    8           0   \n",
+       "2        -19.924       0.9290  107.177   0.8800     0    5           0   \n",
+       "3        -14.734       0.0926  108.003   0.7200     0    1           0   \n",
+       "4        -16.829       0.0424   62.149   0.0693     1   11           1   \n",
+       "...          ...          ...      ...      ...   ...  ...         ...   \n",
+       "169904    -7.461       0.1430  100.012   0.3060     1    1          75   \n",
+       "169905   -10.907       0.0403  128.000   0.2700     1    8          64   \n",
+       "169906    -9.332       0.1050  123.700   0.1530     1    7          70   \n",
+       "169907    -2.557       0.0385  129.916   0.4720     1    1          70   \n",
+       "169908    -7.387       0.0271   80.588   0.3660     1    0          65   \n",
+       "\n",
+       "        explicit  NumArtists  \n",
+       "0              0         1.0  \n",
+       "1              0         2.0  \n",
+       "2              0         1.0  \n",
+       "3              0         1.0  \n",
+       "4              0         2.0  \n",
+       "...          ...         ...  \n",
+       "169904         1         2.0  \n",
+       "169905         0         2.0  \n",
+       "169906         0         2.0  \n",
+       "169907         0         2.0  \n",
+       "169908         0         1.0  \n",
+       "\n",
+       "[169909 rows x 18 columns]"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data2"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Create new feature to evaluate whether the artists of a song contains populat artist or not"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## reformat the artist column in the data\n",
+    "\n",
+    "artist_list = []\n",
+    "for a in data2['artists'].values:\n",
+    "    a =list(a) \n",
+    "    a.remove('[')\n",
+    "    a.remove(']')\n",
+    "    while \"'\"in a:\n",
+    "        a.remove(\"'\")\n",
+    "    a = ''.join(a)\n",
+    "    a = a.split(',')\n",
+    "    artist_list.append(a)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data2['artists'] = artist_list"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "top_song = pd.read_csv('https://raw.githubusercontent.com/yu1inhong/spotify_music_recommendation/main/Spotify-2000.csv')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import collections\n",
+    "artists = top_song['Artist'].values\n",
+    "counter=collections.Counter(artists)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "artist = counter.keys()\n",
+    "fre = counter.values()\n",
+    "top_artist = pd.DataFrame()\n",
+    "top_artist['artist'] = artist\n",
+    "top_artist['frequency'] = fre\n",
+    "top_artist = top_artist.sort_values(by = 'frequency', ascending= False).head(100)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "37"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "counter[top_artist.artist.values[0]]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "artist_popularity = [0 for i in range(len(artist_list))]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "for i in range(len(artist_list)):\n",
+    "    for j in range(len(artist_list[i])):\n",
+    "        if artist_list[i][j] in top_artist.artist.values:\n",
+    "            artist_popularity[i]  = artist_popularity[i] + counter[artist_list[i][j]] ## use frequency as popularity indication"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data2['artist_popularity'] = artist_popularity"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "O4WLIRk2UmG_"
+   },
+   "source": [
+    "We also want to create a column about the name length of a song."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "ipV2CpzHPEoh",
+    "outputId": "375bb47f-30e0-45ae-b560-38f2fda9b9d3"
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "<ipython-input-29-b4554f58eaef>:4: SettingWithCopyWarning: \n",
+      "A value is trying to be set on a copy of a slice from a DataFrame\n",
+      "\n",
+      "See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy\n",
+      "  data2['NameLength'][i] = int(n)\n"
+     ]
+    }
+   ],
+   "source": [
+    "data2['NameLength'] = pd.Series(dtype='int')\n",
+    "for i in range(data2.shape[0]):\n",
+    "    n = len(data2['name'][i].split())\n",
+    "    data2['NameLength'][i] = int(n)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "pS-AJY4kUwXf"
+   },
+   "source": [
+    "We then discard column 'name' and 'artists', as they are no longer useful."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {
+    "id": "ArAMOSzlRixV"
+   },
+   "outputs": [],
+   "source": [
+    "data = data2.drop(columns = ['name','artists'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 488
+    },
+    "id": "IzpVpxquSOuN",
+    "outputId": "f025242f-d9df-4a3a-9b20-c5e2d503ff0c"
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>duration_ms</th>\n",
+       "      <th>year</th>\n",
+       "      <th>acousticness</th>\n",
+       "      <th>danceability</th>\n",
+       "      <th>energy</th>\n",
+       "      <th>instrumentalness</th>\n",
+       "      <th>liveness</th>\n",
+       "      <th>loudness</th>\n",
+       "      <th>speechiness</th>\n",
+       "      <th>tempo</th>\n",
+       "      <th>valence</th>\n",
+       "      <th>mode</th>\n",
+       "      <th>key</th>\n",
+       "      <th>popularity</th>\n",
+       "      <th>explicit</th>\n",
+       "      <th>NumArtists</th>\n",
+       "      <th>artist_popularity</th>\n",
+       "      <th>NameLength</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>158648</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9950</td>\n",
+       "      <td>0.708</td>\n",
+       "      <td>0.1950</td>\n",
+       "      <td>0.563000</td>\n",
+       "      <td>0.1510</td>\n",
+       "      <td>-12.428</td>\n",
+       "      <td>0.0506</td>\n",
+       "      <td>118.469</td>\n",
+       "      <td>0.7790</td>\n",
+       "      <td>1</td>\n",
+       "      <td>10</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>4.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>282133</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9940</td>\n",
+       "      <td>0.379</td>\n",
+       "      <td>0.0135</td>\n",
+       "      <td>0.901000</td>\n",
+       "      <td>0.0763</td>\n",
+       "      <td>-28.454</td>\n",
+       "      <td>0.0462</td>\n",
+       "      <td>83.972</td>\n",
+       "      <td>0.0767</td>\n",
+       "      <td>1</td>\n",
+       "      <td>8</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>6.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>104300</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.6040</td>\n",
+       "      <td>0.749</td>\n",
+       "      <td>0.2200</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.1190</td>\n",
+       "      <td>-19.924</td>\n",
+       "      <td>0.9290</td>\n",
+       "      <td>107.177</td>\n",
+       "      <td>0.8800</td>\n",
+       "      <td>0</td>\n",
+       "      <td>5</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>5.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>180760</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9950</td>\n",
+       "      <td>0.781</td>\n",
+       "      <td>0.1300</td>\n",
+       "      <td>0.887000</td>\n",
+       "      <td>0.1110</td>\n",
+       "      <td>-14.734</td>\n",
+       "      <td>0.0926</td>\n",
+       "      <td>108.003</td>\n",
+       "      <td>0.7200</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>5.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>687733</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.9900</td>\n",
+       "      <td>0.210</td>\n",
+       "      <td>0.2040</td>\n",
+       "      <td>0.908000</td>\n",
+       "      <td>0.0980</td>\n",
+       "      <td>-16.829</td>\n",
+       "      <td>0.0424</td>\n",
+       "      <td>62.149</td>\n",
+       "      <td>0.0693</td>\n",
+       "      <td>1</td>\n",
+       "      <td>11</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>6.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169904</th>\n",
+       "      <td>163800</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.1730</td>\n",
+       "      <td>0.875</td>\n",
+       "      <td>0.4430</td>\n",
+       "      <td>0.000032</td>\n",
+       "      <td>0.0891</td>\n",
+       "      <td>-7.461</td>\n",
+       "      <td>0.1430</td>\n",
+       "      <td>100.012</td>\n",
+       "      <td>0.3060</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>75</td>\n",
+       "      <td>1</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>5.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169905</th>\n",
+       "      <td>167468</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.0167</td>\n",
+       "      <td>0.719</td>\n",
+       "      <td>0.3850</td>\n",
+       "      <td>0.031300</td>\n",
+       "      <td>0.1110</td>\n",
+       "      <td>-10.907</td>\n",
+       "      <td>0.0403</td>\n",
+       "      <td>128.000</td>\n",
+       "      <td>0.2700</td>\n",
+       "      <td>1</td>\n",
+       "      <td>8</td>\n",
+       "      <td>64</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>4.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169906</th>\n",
+       "      <td>180700</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.5380</td>\n",
+       "      <td>0.514</td>\n",
+       "      <td>0.5390</td>\n",
+       "      <td>0.002330</td>\n",
+       "      <td>0.1080</td>\n",
+       "      <td>-9.332</td>\n",
+       "      <td>0.1050</td>\n",
+       "      <td>123.700</td>\n",
+       "      <td>0.1530</td>\n",
+       "      <td>1</td>\n",
+       "      <td>7</td>\n",
+       "      <td>70</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>4.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169907</th>\n",
+       "      <td>167308</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.0714</td>\n",
+       "      <td>0.646</td>\n",
+       "      <td>0.7610</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.2220</td>\n",
+       "      <td>-2.557</td>\n",
+       "      <td>0.0385</td>\n",
+       "      <td>129.916</td>\n",
+       "      <td>0.4720</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>70</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>3.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169908</th>\n",
+       "      <td>214787</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.1090</td>\n",
+       "      <td>0.512</td>\n",
+       "      <td>0.4280</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.1050</td>\n",
+       "      <td>-7.387</td>\n",
+       "      <td>0.0271</td>\n",
+       "      <td>80.588</td>\n",
+       "      <td>0.3660</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>65</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>4.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>169909 rows × 18 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "        duration_ms  year  acousticness  danceability  energy  \\\n",
+       "0            158648  1928        0.9950         0.708  0.1950   \n",
+       "1            282133  1928        0.9940         0.379  0.0135   \n",
+       "2            104300  1928        0.6040         0.749  0.2200   \n",
+       "3            180760  1928        0.9950         0.781  0.1300   \n",
+       "4            687733  1928        0.9900         0.210  0.2040   \n",
+       "...             ...   ...           ...           ...     ...   \n",
+       "169904       163800  2020        0.1730         0.875  0.4430   \n",
+       "169905       167468  2020        0.0167         0.719  0.3850   \n",
+       "169906       180700  2020        0.5380         0.514  0.5390   \n",
+       "169907       167308  2020        0.0714         0.646  0.7610   \n",
+       "169908       214787  2020        0.1090         0.512  0.4280   \n",
+       "\n",
+       "        instrumentalness  liveness  loudness  speechiness    tempo  valence  \\\n",
+       "0               0.563000    0.1510   -12.428       0.0506  118.469   0.7790   \n",
+       "1               0.901000    0.0763   -28.454       0.0462   83.972   0.0767   \n",
+       "2               0.000000    0.1190   -19.924       0.9290  107.177   0.8800   \n",
+       "3               0.887000    0.1110   -14.734       0.0926  108.003   0.7200   \n",
+       "4               0.908000    0.0980   -16.829       0.0424   62.149   0.0693   \n",
+       "...                  ...       ...       ...          ...      ...      ...   \n",
+       "169904          0.000032    0.0891    -7.461       0.1430  100.012   0.3060   \n",
+       "169905          0.031300    0.1110   -10.907       0.0403  128.000   0.2700   \n",
+       "169906          0.002330    0.1080    -9.332       0.1050  123.700   0.1530   \n",
+       "169907          0.000000    0.2220    -2.557       0.0385  129.916   0.4720   \n",
+       "169908          0.000000    0.1050    -7.387       0.0271   80.588   0.3660   \n",
+       "\n",
+       "        mode  key  popularity  explicit  NumArtists  artist_popularity  \\\n",
+       "0          1   10           0         0         1.0                  0   \n",
+       "1          1    8           0         0         2.0                  0   \n",
+       "2          0    5           0         0         1.0                  0   \n",
+       "3          0    1           0         0         1.0                  0   \n",
+       "4          1   11           1         0         2.0                  0   \n",
+       "...      ...  ...         ...       ...         ...                ...   \n",
+       "169904     1    1          75         1         2.0                  0   \n",
+       "169905     1    8          64         0         2.0                  0   \n",
+       "169906     1    7          70         0         2.0                  0   \n",
+       "169907     1    1          70         0         2.0                  0   \n",
+       "169908     1    0          65         0         1.0                  0   \n",
+       "\n",
+       "        NameLength  \n",
+       "0              4.0  \n",
+       "1              6.0  \n",
+       "2              5.0  \n",
+       "3              5.0  \n",
+       "4              6.0  \n",
+       "...            ...  \n",
+       "169904         5.0  \n",
+       "169905         4.0  \n",
+       "169906         4.0  \n",
+       "169907         3.0  \n",
+       "169908         4.0  \n",
+       "\n",
+       "[169909 rows x 18 columns]"
+      ]
+     },
+     "execution_count": 22,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "x63fyz4kMS_U"
+   },
+   "source": [
+    " let's check to see if there are any duplicate rows that might skew our data a certain way:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 488
+    },
+    "id": "goYiLbgYMTqy",
+    "outputId": "b1f3960a-f088-4157-a89b-9fb5f72496ca"
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>duration_ms</th>\n",
+       "      <th>year</th>\n",
+       "      <th>acousticness</th>\n",
+       "      <th>danceability</th>\n",
+       "      <th>energy</th>\n",
+       "      <th>instrumentalness</th>\n",
+       "      <th>liveness</th>\n",
+       "      <th>loudness</th>\n",
+       "      <th>speechiness</th>\n",
+       "      <th>tempo</th>\n",
+       "      <th>valence</th>\n",
+       "      <th>mode</th>\n",
+       "      <th>key</th>\n",
+       "      <th>popularity</th>\n",
+       "      <th>explicit</th>\n",
+       "      <th>NumArtists</th>\n",
+       "      <th>artist_popularity</th>\n",
+       "      <th>NameLength</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>609</th>\n",
+       "      <td>61467</td>\n",
+       "      <td>1945</td>\n",
+       "      <td>0.98300</td>\n",
+       "      <td>0.635</td>\n",
+       "      <td>0.0123</td>\n",
+       "      <td>0.955000</td>\n",
+       "      <td>0.1070</td>\n",
+       "      <td>-27.297</td>\n",
+       "      <td>0.0521</td>\n",
+       "      <td>83.046</td>\n",
+       "      <td>0.610</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>14.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>652</th>\n",
+       "      <td>1325093</td>\n",
+       "      <td>1945</td>\n",
+       "      <td>0.91300</td>\n",
+       "      <td>0.704</td>\n",
+       "      <td>0.2230</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.3260</td>\n",
+       "      <td>-24.480</td>\n",
+       "      <td>0.9350</td>\n",
+       "      <td>112.485</td>\n",
+       "      <td>0.403</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>4.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3344</th>\n",
+       "      <td>260333</td>\n",
+       "      <td>1972</td>\n",
+       "      <td>0.12800</td>\n",
+       "      <td>0.591</td>\n",
+       "      <td>0.6370</td>\n",
+       "      <td>0.019500</td>\n",
+       "      <td>0.0989</td>\n",
+       "      <td>-9.102</td>\n",
+       "      <td>0.0887</td>\n",
+       "      <td>172.452</td>\n",
+       "      <td>0.962</td>\n",
+       "      <td>0</td>\n",
+       "      <td>5</td>\n",
+       "      <td>26</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>6.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8094</th>\n",
+       "      <td>230040</td>\n",
+       "      <td>2020</td>\n",
+       "      <td>0.46000</td>\n",
+       "      <td>0.591</td>\n",
+       "      <td>0.6590</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.3240</td>\n",
+       "      <td>-5.464</td>\n",
+       "      <td>0.0332</td>\n",
+       "      <td>145.997</td>\n",
+       "      <td>0.622</td>\n",
+       "      <td>1</td>\n",
+       "      <td>11</td>\n",
+       "      <td>2</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>4.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8169</th>\n",
+       "      <td>491333</td>\n",
+       "      <td>1928</td>\n",
+       "      <td>0.99300</td>\n",
+       "      <td>0.303</td>\n",
+       "      <td>0.2260</td>\n",
+       "      <td>0.826000</td>\n",
+       "      <td>0.1190</td>\n",
+       "      <td>-21.483</td>\n",
+       "      <td>0.0444</td>\n",
+       "      <td>67.013</td>\n",
+       "      <td>0.146</td>\n",
+       "      <td>1</td>\n",
+       "      <td>3</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>7.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>164200</th>\n",
+       "      <td>164467</td>\n",
+       "      <td>1963</td>\n",
+       "      <td>0.83800</td>\n",
+       "      <td>0.493</td>\n",
+       "      <td>0.2170</td>\n",
+       "      <td>0.004630</td>\n",
+       "      <td>0.0867</td>\n",
+       "      <td>-11.501</td>\n",
+       "      <td>0.0271</td>\n",
+       "      <td>105.003</td>\n",
+       "      <td>0.182</td>\n",
+       "      <td>1</td>\n",
+       "      <td>9</td>\n",
+       "      <td>20</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>166015</th>\n",
+       "      <td>262147</td>\n",
+       "      <td>1982</td>\n",
+       "      <td>0.21300</td>\n",
+       "      <td>0.291</td>\n",
+       "      <td>0.9750</td>\n",
+       "      <td>0.908000</td>\n",
+       "      <td>0.3320</td>\n",
+       "      <td>-10.754</td>\n",
+       "      <td>0.0557</td>\n",
+       "      <td>180.289</td>\n",
+       "      <td>0.127</td>\n",
+       "      <td>0</td>\n",
+       "      <td>6</td>\n",
+       "      <td>33</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>8</td>\n",
+       "      <td>5.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>168041</th>\n",
+       "      <td>179773</td>\n",
+       "      <td>2002</td>\n",
+       "      <td>0.04210</td>\n",
+       "      <td>0.625</td>\n",
+       "      <td>0.9250</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.8650</td>\n",
+       "      <td>-4.435</td>\n",
+       "      <td>0.3420</td>\n",
+       "      <td>172.017</td>\n",
+       "      <td>0.515</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>47</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169035</th>\n",
+       "      <td>281947</td>\n",
+       "      <td>2012</td>\n",
+       "      <td>0.80600</td>\n",
+       "      <td>0.390</td>\n",
+       "      <td>0.2550</td>\n",
+       "      <td>0.000001</td>\n",
+       "      <td>0.0887</td>\n",
+       "      <td>-9.676</td>\n",
+       "      <td>0.0299</td>\n",
+       "      <td>122.056</td>\n",
+       "      <td>0.179</td>\n",
+       "      <td>0</td>\n",
+       "      <td>6</td>\n",
+       "      <td>50</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>4.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>169219</th>\n",
+       "      <td>231000</td>\n",
+       "      <td>2014</td>\n",
+       "      <td>0.00245</td>\n",
+       "      <td>0.588</td>\n",
+       "      <td>0.7910</td>\n",
+       "      <td>0.002580</td>\n",
+       "      <td>0.1180</td>\n",
+       "      <td>-5.595</td>\n",
+       "      <td>0.0402</td>\n",
+       "      <td>94.933</td>\n",
+       "      <td>0.487</td>\n",
+       "      <td>1</td>\n",
+       "      <td>7</td>\n",
+       "      <td>56</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>649 rows × 18 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "        duration_ms  year  acousticness  danceability  energy  \\\n",
+       "609           61467  1945       0.98300         0.635  0.0123   \n",
+       "652         1325093  1945       0.91300         0.704  0.2230   \n",
+       "3344         260333  1972       0.12800         0.591  0.6370   \n",
+       "8094         230040  2020       0.46000         0.591  0.6590   \n",
+       "8169         491333  1928       0.99300         0.303  0.2260   \n",
+       "...             ...   ...           ...           ...     ...   \n",
+       "164200       164467  1963       0.83800         0.493  0.2170   \n",
+       "166015       262147  1982       0.21300         0.291  0.9750   \n",
+       "168041       179773  2002       0.04210         0.625  0.9250   \n",
+       "169035       281947  2012       0.80600         0.390  0.2550   \n",
+       "169219       231000  2014       0.00245         0.588  0.7910   \n",
+       "\n",
+       "        instrumentalness  liveness  loudness  speechiness    tempo  valence  \\\n",
+       "609             0.955000    0.1070   -27.297       0.0521   83.046    0.610   \n",
+       "652             0.000000    0.3260   -24.480       0.9350  112.485    0.403   \n",
+       "3344            0.019500    0.0989    -9.102       0.0887  172.452    0.962   \n",
+       "8094            0.000000    0.3240    -5.464       0.0332  145.997    0.622   \n",
+       "8169            0.826000    0.1190   -21.483       0.0444   67.013    0.146   \n",
+       "...                  ...       ...       ...          ...      ...      ...   \n",
+       "164200          0.004630    0.0867   -11.501       0.0271  105.003    0.182   \n",
+       "166015          0.908000    0.3320   -10.754       0.0557  180.289    0.127   \n",
+       "168041          0.000000    0.8650    -4.435       0.3420  172.017    0.515   \n",
+       "169035          0.000001    0.0887    -9.676       0.0299  122.056    0.179   \n",
+       "169219          0.002580    0.1180    -5.595       0.0402   94.933    0.487   \n",
+       "\n",
+       "        mode  key  popularity  explicit  NumArtists  artist_popularity  \\\n",
+       "609        1    0           0         0         3.0                  0   \n",
+       "652        0    2           0         0         1.0                  0   \n",
+       "3344       0    5          26         0         1.0                  0   \n",
+       "8094       1   11           2         0         1.0                  0   \n",
+       "8169       1    3           0         0         2.0                  0   \n",
+       "...      ...  ...         ...       ...         ...                ...   \n",
+       "164200     1    9          20         0         1.0                  0   \n",
+       "166015     0    6          33         0         1.0                  8   \n",
+       "168041     1    0          47         0         1.0                  0   \n",
+       "169035     0    6          50         0         1.0                  0   \n",
+       "169219     1    7          56         0         1.0                  0   \n",
+       "\n",
+       "        NameLength  \n",
+       "609           14.0  \n",
+       "652            4.0  \n",
+       "3344           6.0  \n",
+       "8094           4.0  \n",
+       "8169           7.0  \n",
+       "...            ...  \n",
+       "164200         2.0  \n",
+       "166015         5.0  \n",
+       "168041         1.0  \n",
+       "169035         4.0  \n",
+       "169219         1.0  \n",
+       "\n",
+       "[649 rows x 18 columns]"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data[data.duplicated()]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "iMVRbMD0McjK"
+   },
+   "source": [
+    "Hence drop the duplicated rows"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 113
+    },
+    "id": "J9L0GOH_Mh2-",
+    "outputId": "eca0b89e-500a-4344-e08f-5bf072898ca3"
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>duration_ms</th>\n",
+       "      <th>year</th>\n",
+       "      <th>acousticness</th>\n",
+       "      <th>danceability</th>\n",
+       "      <th>energy</th>\n",
+       "      <th>instrumentalness</th>\n",
+       "      <th>liveness</th>\n",
+       "      <th>loudness</th>\n",
+       "      <th>speechiness</th>\n",
+       "      <th>tempo</th>\n",
+       "      <th>valence</th>\n",
+       "      <th>mode</th>\n",
+       "      <th>key</th>\n",
+       "      <th>popularity</th>\n",
+       "      <th>explicit</th>\n",
+       "      <th>NumArtists</th>\n",
+       "      <th>artist_popularity</th>\n",
+       "      <th>NameLength</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "Empty DataFrame\n",
+       "Columns: [duration_ms, year, acousticness, danceability, energy, instrumentalness, liveness, loudness, speechiness, tempo, valence, mode, key, popularity, explicit, NumArtists, artist_popularity, NameLength]\n",
+       "Index: []"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.drop_duplicates(inplace=True)\n",
+    "data[data.duplicated()]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "5vz6wlQSU31g"
+   },
+   "source": [
+    "Hence, we've finished the data preprosessing."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "8diC0JxDZEcT"
+   },
+   "source": [
+    "#**data exploration**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "AMe1xFELIl_k"
+   },
+   "source": [
+    "Correlations (Check top 10 positive and negative correlations)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "ATmyGYQHI2lW",
+    "outputId": "412fbdae-9483-49cf-ff9f-26aacb7fea27"
+   },
+   "outputs": [],
+   "source": [
+    "corr = data.corr()['popularity'].sort_values()\n",
+    "\n",
+    "# Display correlations\n",
+    "print('Top 10 - Positive Correlations:')\n",
+    "print('-----------------------------------')\n",
+    "print(corr.tail(10))\n",
+    "print('\\nTop 10 - Negative Correlations:')\n",
+    "print('------------------------------')\n",
+    "print(corr.head(10))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "Yot33dHZhbtl"
+   },
+   "source": [
+    "Correlation matrix"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 1000
+    },
+    "id": "nvSdOfUtZAy9",
+    "outputId": "ae5b46a5-17e8-48c0-e253-438950da6a68"
+   },
+   "outputs": [],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "\n",
+    "plt.figure(figsize=(17,17))\n",
+    "sns.heatmap(data.corr(),annot=True,cmap='Blues')\n",
+    "b,t=plt.ylim()\n",
+    "b+=0.5\n",
+    "t-=0.5\n",
+    "plt.ylim(b,t)\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "qXVXJzRtalOn"
+   },
+   "source": [
+    "Distribution of discrete features"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 1000
+    },
+    "id": "BEoRD7jcdP0-",
+    "outputId": "fc7acd4f-84b5-4f1f-ba57-84cd7d3c6630"
+   },
+   "outputs": [],
+   "source": [
+    "discrete_cols = data[['mode','key', 'explicit', 'NumArtists', 'NameLength']]\n",
+    "for i in discrete_cols:\n",
+    "    plt.figure(figsize=(20,5))\n",
+    "    plt.subplot(131)\n",
+    "    sns.countplot(data[i])\n",
+    "    plt.title(i+' Distribution')\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "hH_wxn4Gd84R"
+   },
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "6sb31_P5d-OW"
+   },
+   "source": [
+    "Distribution of continuous features"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 1000
+    },
+    "id": "Hwkhym-DZAVW",
+    "outputId": "83987efc-964e-4f4e-8775-b6290cdd82eb"
+   },
+   "outputs": [],
+   "source": [
+    "continuous_cols = data.drop(columns = ['mode','key', 'explicit', 'NumArtists', 'NameLength'])\n",
+    "for i in continuous_cols:\n",
+    "    plt.figure(figsize=(20,5))\n",
+    "    \n",
+    "    plt.subplot(131)\n",
+    "    sns.kdeplot(data[i],color='b',shade=True)\n",
+    "    plt.title(i+' Distribution')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "4wEDAsx_jRwu"
+   },
+   "source": [
+    "Before starting to construct the models, we need to detect if there exists the heteroskedasticity problem. Otherwise the inconsistency of a variance can cause the linear regression model to have high bias."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 268
+    },
+    "id": "WAxu-vK3Y_xo",
+    "outputId": "731805f3-ac56-4a29-f94c-bbb6f408832a"
+   },
+   "outputs": [],
+   "source": [
+    "data.head(5)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "-DfiqpbjY-yy"
+   },
+   "outputs": [],
+   "source": [
+    "x = data.drop(columns = ['popularity'])\n",
+    "y = data['popularity']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 1000
+    },
+    "id": "QIbjoG5lY-Qh",
+    "outputId": "0037f77b-e84f-4eb4-c792-7bad69697a7c"
+   },
+   "outputs": [],
+   "source": [
+    "for i in x:\n",
+    "  plt.figure()\n",
+    "  plt.title(i + ' vs popularity')\n",
+    "  plt.scatter(data[i], y)\n",
+    "  plt.ylabel('popularity')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "PEvG5KVIkUSb"
+   },
+   "source": [
+    "According to the graphs above, there is no obvious horn shape figures existing. Thus we conclude that the heteroscedasticity does not exist in our dataset."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "Bg_Eff52NdPy"
+   },
+   "source": [
+    "**Check how the trend of music evolves throughout the years**\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 767
+    },
+    "id": "_tD5X3MCJ0_8",
+    "outputId": "242e3070-3f33-4145-bb55-4330b253bcfe"
+   },
+   "outputs": [],
+   "source": [
+    "sp1, elements = plt.subplots(3, 2) # Initiate the subplots\n",
+    "\n",
+    "arrElements = [\"acousticness\", \"danceability\", \"energy\", \"instrumentalness\", \"speechiness\", \"valence\"]\n",
+    "row = 0\n",
+    "col = 0\n",
+    "\n",
+    "for elem in arrElements: # Produce a line graph for each musical element\n",
+    "    data.groupby(\"year\")[elem].mean().plot(ax=elements[row][col], figsize=(30,20)) # Group rows by year and get the mean values for that particular element\n",
+    "    elements[row][col].set_xlabel(\"decade\")\n",
+    "    elements[row][col].set_ylabel(elem)\n",
+    "    if col == 0:\n",
+    "        col = 1\n",
+    "    elif row == 0 and col == 1:\n",
+    "        row = 1\n",
+    "        col = 0\n",
+    "    elif row == 1 and col == 1:\n",
+    "        row = 2\n",
+    "        col = 0"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "mJ_GEIN0Owiq"
+   },
+   "source": [
+    "Explore the relationship between music elements and mode-key combination"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 905
+    },
+    "id": "kd6VsTzhPjuN",
+    "outputId": "89f51634-1c36-4b09-9659-1d7b08b0d990"
+   },
+   "outputs": [],
+   "source": [
+    "df = data.groupby([\"mode\", \"key\"]).agg(\"mean\")\n",
+    "for i in range(2): # Loop through each unique value for the mode variable\n",
+    "    mode_df = data.query(\"mode == @i\") # Filter df to only contain tracks of the present mode\n",
+    "    for j in range (12): # Loop through each unique value for key variable\n",
+    "        modekey_df = mode_df.query(\"key == @j\") # Filter df to only contain tracks of the present key, partnered with the present mode acquired in the parent loop\n",
+    "\n",
+    "mode_key = []\n",
+    "for i in range(2):\n",
+    "  for j in range(12):\n",
+    "    mode_key.append(str(i)+\"_\"+str(j))\n",
+    "\n",
+    "df.insert(loc=0, column=\"count\", value=data.groupby([\"mode\", \"key\"]).size())\n",
+    "df.insert(loc=0,column=\"mode-key\",value =mode_key)\n",
+    "df"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "U4lTF7lQSeD5"
+   },
+   "source": [
+    "Rank the number to find the most and least popular key_mode combination and analyze their music elements"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "VQzdvrS8SkTc",
+    "outputId": "7159610a-a4de-4ac1-8d29-1ea8a1cd8be8"
+   },
+   "outputs": [],
+   "source": [
+    "df['count'].rank(ascending=False)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "gcWoCElfTof7"
+   },
+   "source": [
+    "key-mode: 0,1 (C major is the most popular):"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "n9dYvKqKTv5x",
+    "outputId": "fbf47426-726f-4f91-b73e-529b7172735c"
+   },
+   "outputs": [],
+   "source": [
+    "print(data.query(\"mode == 1 and key == 0\").mean())\n",
+    "print(\"------------------------------------------------\")\n",
+    "print(data.mean())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "9IXnxjDRUa0o"
+   },
+   "source": [
+    "Most of the C-major songs are in the 70s where it is danceable and energetic."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "9aaeAvJBSij2"
+   },
+   "source": [
+    "# Clustering"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 268
+    },
+    "id": "8JRjq-AvSox1",
+    "outputId": "cd548632-ce83-4d46-e223-a614a54154e3"
+   },
+   "outputs": [],
+   "source": [
+    "data.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "0Neb4jp8opdX"
+   },
+   "outputs": [],
+   "source": [
+    "X = data.drop(columns='popularity')\n",
+    "y = data['popularity']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "WlfxirbjplWQ"
+   },
+   "outputs": [],
+   "source": [
+    "from sklearn.preprocessing import StandardScaler\n",
+    "scaler = StandardScaler()\n",
+    "X_std = scaler.fit_transform(X)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "xfaOgSaBoJoo"
+   },
+   "source": [
+    "### all\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "SY20tsf1oMqS"
+   },
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "qlSbPZNjn-QA"
+   },
+   "source": [
+    "## K-means"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "hz0w7vRzp41b",
+    "outputId": "55faf60b-d6f5-49e7-f4d3-d879b1a0a57b"
+   },
+   "outputs": [],
+   "source": [
+    "############use Elbow method to find optimal k##########\n",
+    "from sklearn.cluster import KMeans\n",
+    "from sklearn.metrics import silhouette_samples\n",
+    "from sklearn.metrics import silhouette_score\n",
+    "\n",
+    "from tqdm import tqdm\n",
+    "withinss = []\n",
+    "results = []\n",
+    "for i in tqdm(range(2,8)):\n",
+    "    kmeans = KMeans(n_clusters = i)\n",
+    "    model = kmeans.fit(X_std)\n",
+    "    labels = model.labels_\n",
+    "    withinss.append(model.inertia_)\n",
+    "    results.append(silhouette_score(X_std, labels))\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 310
+    },
+    "id": "OZqazYlk8a9O",
+    "outputId": "541f4d6b-731c-438c-86c4-750eabb7fcd9"
+   },
+   "outputs": [],
+   "source": [
+    "from matplotlib import pyplot\n",
+    "print(\"Hi, please run the following two lines sepearately!!!!!!!  ;)\")\n",
+    "#1\n",
+    "pyplot.plot([2,3,4,5,6,7],withinss)\n",
+    "print(\"Dear TA, please run these following two lines sepearately, otherwise its hard to see the second picture's shapem!!!!!!\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 282
+    },
+    "id": "G7Ye1sru8d1_",
+    "outputId": "1e48d765-59d9-418e-df7d-e6ec4ce6c4cb"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.plot([2,3,4,5,6,7],results) \n",
+    "print(\"From the second graph we can see, Silhouette score drops dramatically after k=2, so I decided to use k=2\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "LlVQEHVkrabr",
+    "outputId": "fbaf59ce-757e-4758-9579-011adf82bc5d"
+   },
+   "outputs": [],
+   "source": [
+    "#use selected features to build k-Means model\n",
+    "from sklearn.cluster import KMeans\n",
+    "kmeans = KMeans(n_clusters = 2)\n",
+    "model = kmeans.fit(X_std)\n",
+    "labels = model.labels_\n",
+    "labels\n",
+    "\n",
+    "from sklearn.metrics import silhouette_samples\n",
+    "silhouette_samples(X_std, labels)\n",
+    "\n",
+    "from sklearn.metrics import silhouette_score\n",
+    "silhouette_score(X_std, labels)\n",
+    "\n",
+    "#count how many are in first cluster and how many in second\n",
+    "l1 = []\n",
+    "l0 = []\n",
+    "l2 = []\n",
+    "for i in range(len(labels)):\n",
+    "    if labels[i] == 1:\n",
+    "        l1.append(labels[i])\n",
+    "    if labels[i] == 2:\n",
+    "        l2.append(labels[i])\n",
+    "    else:\n",
+    "        l0.append(labels[i])\n",
+    "        \n",
+    "print(\"There are \"+ str(len(l1)) + \" numbers in the first cluster\")\n",
+    "print(\"There are \"+ str(len(l0))+\" numbers in the second cluster\")\n",
+    "print(\"There are \"+ str(len(l2))+\" numbers in the third cluster\")\n",
+    "\n",
+    "#find the cluster center's characteristics\n",
+    "centers = model.cluster_centers_\n",
+    "print(centers)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 293
+    },
+    "id": "e3P1RynjnoTR",
+    "outputId": "81b9e3a1-2017-4b76-8e40-482e642f3819"
+   },
+   "outputs": [],
+   "source": [
+    "from sklearn.cluster import KMeans\n",
+    "kmeans = KMeans(n_clusters=3) \n",
+    "model = kmeans.fit(X_std) \n",
+    "labels = model.predict(X_std)\n",
+    "# Plot cluster membership\n",
+    "from matplotlib import pyplot\n",
+    "pyplot.scatter(data['popularity'], data['duration_ms'], c=labels, cmap='rainbow')\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 282
+    },
+    "id": "QnP39DMyr41t",
+    "outputId": "2ca8bb22-c69a-4d9d-d171-cace73ba5d4f"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.scatter(data['popularity'], data['year'], c=labels, cmap='rainbow')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 282
+    },
+    "id": "T_u59cB6r47A",
+    "outputId": "0395bd65-4f18-44bb-f9e4-5f9b9f42a1db"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.scatter(data['popularity'], data['acousticness'], c=labels, cmap='rainbow')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 282
+    },
+    "id": "hWDy8KTmr49V",
+    "outputId": "041b261b-945d-41ad-ebee-2b710debbb06"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.scatter(data['popularity'], data['energy'], c=labels, cmap='rainbow')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 282
+    },
+    "id": "cKP6JHLAr5AD",
+    "outputId": "2a6939f3-fbac-418a-e540-dc7f1f1e4f69"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.scatter(data['popularity'], data['instrumentalness'], c=labels, cmap='rainbow')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 282
+    },
+    "id": "yB5C2BdJr5Cj",
+    "outputId": "12ea00a1-d0fe-4ed1-d010-79cd6abb8f28"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.scatter(data['popularity'], data['liveness'], c=labels, cmap='rainbow')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 282
+    },
+    "id": "TWxW1_ylr5FA",
+    "outputId": "e05ac795-a3cd-4fe3-fc9a-aea5ac20a5e0"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.scatter(data['popularity'], data['loudness'], c=labels, cmap='rainbow')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 283
+    },
+    "id": "kcd4vtARr5KB",
+    "outputId": "88ca044c-4c9a-4152-c39e-551183f860a6"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.scatter(data['popularity'], data['speechiness'], c=labels, cmap='rainbow')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 282
+    },
+    "id": "4tLbB1i_sLTF",
+    "outputId": "18f33f98-54a4-49d6-c3c8-328fb4c102c9"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.scatter(data['popularity'], data['mode'], c=labels, cmap='rainbow')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 282
+    },
+    "id": "CgPdu1BUsLY-",
+    "outputId": "410b608c-89f8-42ee-e417-a94411e35603"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.scatter(data['popularity'], data['key'], c=labels, cmap='rainbow')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 282
+    },
+    "id": "QrSQUbvosLee",
+    "outputId": "e1c1f0aa-c4b1-40d0-999c-5070ebf6732b"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.scatter(data['popularity'], data['explicit'], c=labels, cmap='rainbow')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 282
+    },
+    "id": "4uEz_2lZsLhs",
+    "outputId": "1b720aba-f72e-4c6d-cf70-ca6ec0538ddc"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.scatter(data['popularity'], data['NumArtists'], c=labels, cmap='rainbow')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 282
+    },
+    "id": "PEQTpV3vsLnk",
+    "outputId": "d1d0b8e0-25f3-46aa-bfd6-11c2dc57f3fe"
+   },
+   "outputs": [],
+   "source": [
+    "pyplot.scatter(data['popularity'], data['NameLength'], c=labels, cmap='rainbow')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "4SvYVOQjnpCs"
+   },
+   "source": [
+    "## DBSCAN"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "lSwDdfTg0OIK"
+   },
+   "outputs": [],
+   "source": [
+    "import numpy as np \n",
+    "from sklearn.cluster import DBSCAN \n",
+    "from sklearn import metrics\n",
+    "from sklearn.preprocessing import StandardScaler \n",
+    "import matplotlib.pyplot as plt \n",
+    "\n",
+    "from sklearn.datasets import make_blobs, make_circles, make_moons\n",
+    "from sklearn.cluster import KMeans"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "aCURg_9j0-wE"
+   },
+   "outputs": [],
+   "source": [
+    "X = data.drop(columns='popularity')\n",
+    "y = data['popularity']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "jrtPPVnB0S1Y"
+   },
+   "outputs": [],
+   "source": [
+    "X = StandardScaler().fit_transform(X)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "2o0t6-JS0S4O"
+   },
+   "outputs": [],
+   "source": [
+    "optimal_k = 3\n",
+    "kmeans = KMeans(n_clusters = optimal_k, init = 'k-means++')\n",
+    "y_kmeans = kmeans.fit_predict(X)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "nZ6kWWeg0S9J"
+   },
+   "outputs": [],
+   "source": [
+    "'''\n",
+    "db = DBSCAN(eps=0.3, min_samples=10).fit(X)\n",
+    "core_samples_mask = np.zeros_like(db.labels_, dtype=bool)\n",
+    "core_samples_mask[db.core_sample_indices_] = True\n",
+    "labels = db.labels_\n",
+    "\n",
+    "# Number of clusters in labels, ignoring noise if present.\n",
+    "n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)\n",
+    "n_noise_ = list(labels).count(-1)\n",
+    "'''"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "mkZ1T4kA7cOC",
+    "outputId": "df41c3c1-4dd3-4f47-af5a-7ee929e2de00"
+   },
+   "outputs": [],
+   "source": [
+    "######## number of cluster = 3 ##############\n",
+    "######## use this one ###########\n",
+    "import numpy as np \n",
+    "from sklearn.cluster import DBSCAN \n",
+    "from sklearn import metrics\n",
+    "from sklearn.preprocessing import StandardScaler \n",
+    "import matplotlib.pyplot as plt \n",
+    "\n",
+    "from sklearn.datasets import make_blobs, make_circles, make_moons\n",
+    "from sklearn.cluster import KMeans\n",
+    "\n",
+    "# Compute DBSCAN\n",
+    "db = DBSCAN(eps=0.45, min_samples=5).fit(X_std)\n",
+    "core_samples_mask = np.zeros_like(db.labels_, dtype=bool)\n",
+    "core_samples_mask[db.core_sample_indices_] = True\n",
+    "labels = db.labels_\n",
+    "\n",
+    "# Number of clusters in labels, ignoring noise if present.\n",
+    "n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)\n",
+    "n_noise_ = list(labels).count(-1)\n",
+    "print(\"numebr of clusters:\" + str(n_clusters_))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 426
+    },
+    "id": "LcuauhQp0aj6",
+    "outputId": "1f1ba731-6f83-4cd9-b7f1-446209e017da"
+   },
+   "outputs": [],
+   "source": [
+    "fig, (ax1, ax2) = plt.subplots(ncols =2)\n",
+    "# fig, (ax3) = plt.subplots(ncols =1)\n",
+    "fig.set_figheight(10)\n",
+    "fig.set_figwidth(30)\n",
+    "\n",
+    "colours = ['red','blue','green','yellow','cyan','magenta','orange','aqua','pink']\n",
+    "for i in range(optimal_k):\n",
+    "    ax1.scatter(X[y_kmeans == i, 0], X[y_kmeans == i, 1], s = 100, c = colours[i], label = 'Group'+str(i+1))\n",
+    "\n",
+    "# Plotting the centroids of the clusters\n",
+    "ax1.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:,1], \n",
+    "            s = 100, c = 'black', label = 'Centroids')\n",
+    "ax1.set_title(\"K Means clustering\")\n",
+    "ax1.legend()\n",
+    "\n",
+    "\n",
+    "# Black removed and is used for noise instead.\n",
+    "unique_labels = set(labels)\n",
+    "for k, col in zip(unique_labels, colours):\n",
+    "    if k == -1:\n",
+    "        # Black used for noise.\n",
+    "        col = [0, 0, 0, 1]\n",
+    "\n",
+    "    class_member_mask = (labels == k)\n",
+    "    \n",
+    "    xy = X[class_member_mask & core_samples_mask]\n",
+    "    ax2.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=(col),\n",
+    "             markeredgecolor='k', markersize=14)\n",
+    "\n",
+    "    xy = X[class_member_mask & ~core_samples_mask]\n",
+    "    ax2.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=(col),\n",
+    "             markeredgecolor='k', markersize=6)\n",
+    "\n",
+    "ax2.set_title('DBSCAN with Estimated number of clusters: %d' % n_clusters_)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "aFFlLFQmLVlK"
+   },
+   "source": [
+    "## PCA"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "L8nouaLKV_2o"
+   },
+   "source": [
+    "### first try"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "s-ar_gxhTtWN",
+    "outputId": "0b380366-39dd-4537-fee1-879be3a453aa"
+   },
+   "outputs": [],
+   "source": [
+    "pip install bioinfokit"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "ghC4GY24T_UX"
+   },
+   "outputs": [],
+   "source": [
+    "from bioinfokit.visuz import cluster"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "jDQT2IUgLpl-"
+   },
+   "outputs": [],
+   "source": [
+    "X = data.drop(columns='popularity')\n",
+    "y = data['popularity']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "nNiWG8QNLYur",
+    "outputId": "339ed740-3cd9-4fb8-da01-09eab883a6fa"
+   },
+   "outputs": [],
+   "source": [
+    "from sklearn.decomposition import PCA \n",
+    "pca = PCA(n_components=10) \n",
+    "pca.fit(X)\n",
+    "pca.explained_variance_ratio_"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "h6RERm7YSWt0"
+   },
+   "outputs": [],
+   "source": [
+    "X_st =  StandardScaler().fit_transform(X)\n",
+    "pca_out = PCA().fit(X_st)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "MR1hB5cIS7e1"
+   },
+   "outputs": [],
+   "source": [
+    "loadings = pca_out.components_"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "cK_b_PGkTHSG",
+    "outputId": "3cba5b32-ac22-4430-b867-16df4bcdf385"
+   },
+   "outputs": [],
+   "source": [
+    "pca_out.explained_variance_"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 712
+    },
+    "id": "ciOWjsvsTKRB",
+    "outputId": "410c2b92-b79e-4654-d078-5621a2241353"
+   },
+   "outputs": [],
+   "source": [
+    "# get biplot\n",
+    "pca_scores = PCA().fit_transform(X_st)\n",
+    "cluster.biplot(cscore=pca_scores, loadings=loadings, labels=X.columns.values, var1=round(pca_out.explained_variance_ratio_[0]*100, 2),\n",
+    "    var2=round(pca_out.explained_variance_ratio_[1]*100, 2), colorlist='target')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "HQCSpzBPWDDD"
+   },
+   "source": [
+    "### second try"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "F79QNu3t9V9T",
+    "outputId": "75d352b8-e4f6-462f-907b-08744eda6d37"
+   },
+   "outputs": [],
+   "source": [
+    "pip install psynlig"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "ySd_mgbp9Tab"
+   },
+   "outputs": [],
+   "source": [
+    "from psynlig import pca_2d_scores\n",
+    "from matplotlib import pyplot as plt\n",
+    "import pandas as pd\n",
+    "from sklearn.datasets import load_breast_cancer\n",
+    "from sklearn.preprocessing import scale\n",
+    "from sklearn.decomposition import PCA"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "1FTJKD0G-K5i"
+   },
+   "outputs": [],
+   "source": [
+    "X = data.drop(columns='popularity')\n",
+    "y = data['popularity']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "HQIZiQ1B9svY"
+   },
+   "outputs": [],
+   "source": [
+    "pca = PCA()\n",
+    "scores = pca.fit_transform(X)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "h54_5FWy-KcJ"
+   },
+   "outputs": [],
+   "source": [
+    "loading_settings = {\n",
+    "    'add_text': True,\n",
+    "    'add_legend': False,\n",
+    "    'biplot': True,\n",
+    "    'text': {\n",
+    "        'fontsize': 'x-large',\n",
+    "        'alpha': 0.8,\n",
+    "        'outline': {'linewidth': 1.5}\n",
+    "    },\n",
+    "}\n",
+    "\n",
+    "xvars = ['duration_ms',\t'year',\t'acousticness',\t'danceability',\t'energy',\t'instrumentalness',\t'liveness',\t'loudness',\t'speechiness',\t'tempo',\t'valence',\t'mode',\t'key',\t'explicit',\t'NumArtists',\t'NameLength']\n",
+    "class_data = data['popularity']\n",
+    "class_names = dict(enumerate(data['popularity']))\n",
+    "X = scale(X)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 358
+    },
+    "id": "g9HuJsMP9xhn",
+    "outputId": "4b1a8202-1f5a-4ecd-a659-b69ab6b7759d"
+   },
+   "outputs": [],
+   "source": [
+    "pca_2d_scores(\n",
+    "    pca,\n",
+    "    scores,\n",
+    "    xvars=xvars,\n",
+    "    class_data=class_data,\n",
+    "    class_names=class_names,\n",
+    "    select_components={(1, 2)},\n",
+    "    loading_settings=loading_settings,\n",
+    "    s=150,\n",
+    "    alpha=.5,\n",
+    "    cmap_loadings='plasma',\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "T17SFMAhWuSN"
+   },
+   "outputs": [],
+   "source": [
+    "pca_2d_scores(\n",
+    "    pca,\n",
+    "    scores,\n",
+    "    xvars=xvars,\n",
+    "    class_data=class_data,\n",
+    "    class_names=class_names,\n",
+    "    select_components={(1, 2)},\n",
+    "    loading_settings=loading_settings,\n",
+    "    s=150,\n",
+    "    alpha=.5,\n",
+    "    cmap_class='Spectral',\n",
+    ")\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "kNuGAdRb9Tlq"
+   },
+   "outputs": [],
+   "source": [
+    "## example\n",
+    "data_set = load_breast_cancer()\n",
+    "data = pd.DataFrame(data_set['data'], columns=data_set['feature_names'])\n",
+    "xvars = [\n",
+    "    'mean radius',\n",
+    "    'mean texture',\n",
+    "    'mean perimeter',\n",
+    "    'mean area',\n",
+    "    'mean smoothness',\n",
+    "    'mean compactness',\n",
+    "    'mean concavity',\n",
+    "    'mean concave points',\n",
+    "    'mean symmetry',\n",
+    "    'mean fractal dimension',\n",
+    "]\n",
+    "data = data[xvars]\n",
+    "class_data = data_set['target']\n",
+    "class_names = dict(enumerate(data_set['target_names']))\n",
+    "data = scale(data)\n",
+    "\n",
+    "pcloading_settings = {\n",
+    "    'add_text': True,\n",
+    "    'add_legend': False,\n",
+    "    'biplot': True,\n",
+    "    'text': {\n",
+    "        'fontsize': 'x-large',\n",
+    "        'alpha': 0.8,\n",
+    "        'outline': {'linewidth': 1.5}\n",
+    "    },\n",
+    "}a = PCA()\n",
+    "scores = pca.fit_transform(data)\n",
+    "\n",
+    "\n",
+    "\n",
+    "pca_2d_scores(\n",
+    "    pca,\n",
+    "    scores,\n",
+    "    xvars=xvars,\n",
+    "    class_data=class_data,\n",
+    "    class_names=class_names,\n",
+    "    select_components={(1, 2)},\n",
+    "    loading_settings=loading_settings,\n",
+    "    s=150,\n",
+    "    alpha=.5,\n",
+    "    cmap_loadings='plasma',\n",
+    ")\n",
+    "\n",
+    "loading_settings = {\n",
+    "    'add_text': False,\n",
+    "    'add_legend': True,\n",
+    "    'biplot': True,\n",
+    "}\n",
+    "\n",
+    "pca_2d_scores(\n",
+    "    pca,\n",
+    "    scores,\n",
+    "    xvars=xvars,\n",
+    "    class_data=class_data,\n",
+    "    class_names=class_names,\n",
+    "    select_components={(1, 2)},\n",
+    "    loading_settings=loading_settings,\n",
+    "    s=150,\n",
+    "    alpha=.5,\n",
+    "    cmap_class='Spectral',\n",
+    ")\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "id": "HxKlWgkX9Toa"
+   },
+   "source": [
+    "## Recommendation engine based on KNN"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## KNN Recommendation Based on song title"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "from sklearn.neighbors import NearestNeighbors"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def check_title_index(data):\n",
+    "    title = input('Please in put a song you like ヽ(○´∀`)ﾉ♪')\n",
+    "    warning = 'The song you want to search does not exist in Spotify dataset. Please Try another one :('\n",
+    "    \n",
+    "    for i in range(len(data['name'])):\n",
+    "        if title.lower() == data['name'].values[i].lower():\n",
+    "            index = i\n",
+    "            break\n",
+    "        else:\n",
+    "            index = 'none'\n",
+    "    if index != 'none':\n",
+    "        return index\n",
+    "    if index == 'none':\n",
+    "        return warning"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 79,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def knn_recommendation(random_status,data,num_recommendation):\n",
+    "    data_num = data.iloc[:,2:]\n",
+    "    data_matrix = np.matrix(data_num.values) \n",
+    "    knn = NearestNeighbors(metric = 'cosine', algorithm='auto', leaf_size=30, n_neighbors=5, p=2,radius=1.0)\n",
+    "    knn.fit(data_matrix)\n",
+    "    \n",
+    "    if random_status == True:\n",
+    "        query_index = np.random.choice(data.shape[0])\n",
+    "    else:\n",
+    "        #title = input('Please in put a song you like ヽ(○´∀`)ﾉ♪')\n",
+    "        ind = check_title_index(data)\n",
+    "        if type(ind) == int:\n",
+    "            query_index = ind\n",
+    "        else:\n",
+    "            return ind\n",
+    "     \n",
+    "    distances, indices = knn.kneighbors(data_matrix[query_index,:], n_neighbors=num_recommendation+1)\n",
+    "    indices = indices[0]\n",
+    "    indices = list(indices)\n",
+    "    indices.remove(query_index)\n",
+    "    print('Here are',num_recommendation,'recommended songs for you :)')\n",
+    "    for i in range(len(indices)):\n",
+    "        song_name = data.iloc[indices[i],:]['name']\n",
+    "        artists_lis = data.iloc[indices[i],:].artists\n",
+    "        artists_lis = ','.join(artists_lis)\n",
+    "        year = data.iloc[indices[i],:].year\n",
+    "        print('#',i+1,\"♪(´∇`*)\")\n",
+    "        print('Song Name:',song_name)\n",
+    "        print('Artist Name:', artists_lis)\n",
+    "        print('The year of publication is:',year)\n",
+    "   "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 80,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Please in put a song you like ヽ(○´∀`)ﾉ♪i love you\n",
+      "Here are 3 recommended songs for you :)\n",
+      "# 1 ♪(´∇`*)\n",
+      "Song Name: Crest Of A Wave\n",
+      "Artist Name: Rory Gallagher\n",
+      "The year of publication is: 1971\n",
+      "# 2 ♪(´∇`*)\n",
+      "Song Name: Some Love\n",
+      "Artist Name: Chaka Khan, Lew Hahn\n",
+      "The year of publication is: 1978\n",
+      "# 3 ♪(´∇`*)\n",
+      "Song Name: Born with a Broken Heart\n",
+      "Artist Name: Kenny Wayne Shepherd\n",
+      "The year of publication is: 1995\n"
+     ]
+    }
+   ],
+   "source": [
+    "knn_recommendation(False,data2,3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## KNN recommendation based on feature"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 222,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def check_index(target,feature_name,data):\n",
+    "    for i in range(len(data[feature_name].values)):\n",
+    "        if target == data[feature_name].values[i]:\n",
+    "            index = i\n",
+    "            return index"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 223,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def check_existence(inp,lis):\n",
+    "    if inp not in lis:\n",
+    "        return False\n",
+    "    else:\n",
+    "        return True"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 224,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def check_percentage(lvl):\n",
+    "    try:\n",
+    "        val = float(lvl)\n",
+    "    except ValueError:\n",
+    "        return False\n",
+    "    \n",
+    "    lvl = float(lvl)\n",
+    "    \n",
+    "    if lvl>1 or lvl<0:\n",
+    "        return False\n",
+    "    else:\n",
+    "        return True"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 229,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def knn_recommendation_by_feature(data,num_recommendation):\n",
+    "    data_num = data.iloc[:,2:]\n",
+    "    data_matrix = np.matrix(data_num.values) \n",
+    "    knn = NearestNeighbors(metric = 'cosine', algorithm='auto', leaf_size=30, n_neighbors=5, p=2,radius=1.0)\n",
+    "    knn.fit(data_matrix)\n",
+    "    \n",
+    "    feature_list = list(data_num.columns)\n",
+    "    feature_list.remove('year')\n",
+    "    feature_list.remove('duration_ms')\n",
+    "    \n",
+    "    \n",
+    "    print(\"♫♪˙‿˙♫♪ Hi, I am here to help you find songs that matches your mood ♫♪˙‿˙♫♪\")\n",
+    "    print('\\n')\n",
+    "    print(\"Please tell me which characteristic of music you care the most about ~\")\n",
+    "    print(\"Here is a list of features:\")\n",
+    "    print('\\n')\n",
+    "    print(', '.join(feature_list))\n",
+    "    print('\\n')\n",
+    "    inp = input(\"Please input the feature you want:\")\n",
+    "    status = check_existence(inp,feature_list)\n",
+    "    \n",
+    "    while status == False:\n",
+    "        print('\\n')\n",
+    "        print('(¬д¬。) The feature you input is not in our list. Please try to select a feature from the following list.')\n",
+    "        print('\\n')\n",
+    "        print(', '.join(feature_list))\n",
+    "        inp = input(\"Please input the feature you want:\")\n",
+    "        status = check_existence(inp,feature_list)\n",
+    "    \n",
+    "    print('\\n')\n",
+    "    print(\"ヽ(•̀ω•́ )ゝ Copy that! The feature you selected is:\",inp)\n",
+    "    print('\\n')\n",
+    "    print('Please tell me how many percentage of', inp, 'do you want:')\n",
+    "    lvl = input(\"Input percentage:\")\n",
+    "    status2 = check_percentage(lvl)\n",
+    "    while status2 == False:\n",
+    "        print('\\n')\n",
+    "        print('(¬д¬。) You did not input a correct number. Pertcentage is fractional number in range [0,1]. Please try again.')\n",
+    "        print('\\n')\n",
+    "        lvl = input(\"Input percentage:\")\n",
+    "        status2 = check_percentage(lvl)\n",
+    "    lvl = float(lvl)\n",
+    "    target = data2[inp].quantile(q = lvl,interpolation='nearest')\n",
+    "    query_index = check_index(target,inp,data)\n",
+    "    \n",
+    "    distances, indices = knn.kneighbors(data_matrix[query_index,:], n_neighbors=num_recommendation+1)\n",
+    "    indices = indices[0]\n",
+    "    indices = list(indices)\n",
+    "    indices.remove(query_index)\n",
+    "    print('Here are',num_recommendation,'recommended songs for you :)')\n",
+    "    for i in range(len(indices)):\n",
+    "        song_name = data.iloc[indices[i],:]['name']\n",
+    "        artists_lis = data.iloc[indices[i],:].artists\n",
+    "        artists_lis = ','.join(artists_lis)\n",
+    "        year = data.iloc[indices[i],:].year\n",
+    "        print('#',i+1,\"♪(´∇`*)\")\n",
+    "        print('Song Name:',song_name)\n",
+    "        print('Artist Name:', artists_lis)\n",
+    "        print('The year of publication is:',year)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 230,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "♫♪˙‿˙♫♪ Hi, I am here to help you find songs that matches your mood ♫♪˙‿˙♫♪\n",
+      "\n",
+      "\n",
+      "Please tell me which characteristic of music you care the most about ~\n",
+      "Here is a list of features:\n",
+      "\n",
+      "\n",
+      "acousticness, danceability, energy, instrumentalness, liveness, loudness, speechiness, tempo, valence, mode, key, popularity, explicit, NumArtists, artist_popularity, NameLength\n",
+      "\n",
+      "\n",
+      "Please input the feature you want:tempo\n",
+      "\n",
+      "\n",
+      "ヽ(•̀ω•́ )ゝ Copy that! The feature you selected is: tempo\n",
+      "\n",
+      "\n",
+      "Please tell me how many percentage of tempo do you want:\n",
+      "Input percentage:0.7\n",
+      "Here are 3 recommended songs for you :)\n",
+      "# 1 ♪(´∇`*)\n",
+      "Song Name: The Way Up The Hill\n",
+      "Artist Name: \"The Highway Q.C.s\"\n",
+      "The year of publication is: 1960\n",
+      "# 2 ♪(´∇`*)\n",
+      "Song Name: Mama Inez\n",
+      "Artist Name: Charlie Parker And His Orchestra\n",
+      "The year of publication is: 1957\n",
+      "# 3 ♪(´∇`*)\n",
+      "Song Name: Viva la Jota - Remastered\n",
+      "Artist Name: Legión Española\n",
+      "The year of publication is: 1936\n"
+     ]
+    }
+   ],
+   "source": [
+    "knn_recommendation_by_feature(data2,3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "colab": {
+   "collapsed_sections": [],
+   "name": "code.ipynb",
+   "provenance": []
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 1
+}
