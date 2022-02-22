@@ -7,7 +7,7 @@
 <p align="center">   
 </p>
 
-**Conducted by: Jingyu Chen, Yulin Hong, Yingxin Jiang, Yi Kuang, Xintong Li, Kejia Liu, Yichen wang, Kexin Wang**
+**Conducted by: Jingyu Chen, Yulin Hong, Yingxin Jiang, Yi Kuang, Xintong Li, Alice Liu, Yichen wang, Kexin Wang**
 
 # Introduction:
 This project is conducted using [Spotify dataset on Kaggle](https://www.kaggle.com/ektanegi/spotifydata-19212020). 
