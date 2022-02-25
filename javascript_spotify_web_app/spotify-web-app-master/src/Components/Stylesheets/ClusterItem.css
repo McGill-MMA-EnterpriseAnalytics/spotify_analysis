@@ -1,0 +1,9 @@
+img {
+  max-width: 200px;
+}
+
+.cluster-item{
+  margin: 2px;
+  color: #1DB954;
+  font-size: 48px;
+}
