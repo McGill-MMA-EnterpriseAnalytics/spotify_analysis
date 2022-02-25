@@ -32,6 +32,9 @@ This project is conducted using [Spotify dataset on Kaggle](https://www.kaggle.c
 **Dummy:**
 - mode (0 = Minor, 1 = Major)
 - explicit (0 = No explicit content, 1 = Explicit content)
+- genre_fit (1 = not fit the desired genre, 5 = Excellent fit)
+- mood_fit (1 = not fit the desired mood, 5 = Excellent fit)
+- age (ranges from 20-29)
 
 **Categorical:**
 - key (All keys on octave encoded as values ranging from 0 to 11, starting on C as 0, C# as 1 and so on…)
